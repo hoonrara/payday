@@ -1,0 +1,75 @@
+# 📁 빌드 시스템 및 툴 관련
+HELP.md
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# 🌱 Spring Tool Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# 💡 IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# 🧱 NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# 🧩 Visual Studio Code
+.vscode/
+
+# 🔐 환경 설정 및 민감 정보
+application.yml
+application.yaml
+application-dev.yml
+application-prod.yml
+.env
+
+# 📝 로그 파일
+*.log
+
+# 💻 OS 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 🔧 QueryDSL 생성 파일
+**/generated/
+**/generated-sources/
+
+# 🧪 테스트 커버리지
+coverage/
+jacoco.exec
+
+# 📦 빌드 아티팩트 및 임시 파일
+*.class
+*.jar
+*.war
+*.tmp
+*.bak
+
+# 🧪 테스트 리포트 디렉토리
+/test-output/
+/test-report/
+
+# 🐳 Docker 관련
+docker-compose.override.yml
+.docker/
