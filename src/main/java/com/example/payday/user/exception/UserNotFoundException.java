@@ -1,11 +1,12 @@
 package com.example.payday.user.exception;
 
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException() {
-        super("존재하지 않는 사용자입니다.");
-    }
 
-    public UserNotFoundException(String message) {
-        super(message);
+
+import com.example.payday.global.exception.ErrorCode;
+import com.example.payday.global.exception.base.BusinessException;
+
+public class UserNotFoundException extends BusinessException {
+    public UserNotFoundException() {
+        super(ErrorCode.USER_NOT_FOUND);
     }
 }
