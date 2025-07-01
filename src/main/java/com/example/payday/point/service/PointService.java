@@ -1,5 +1,6 @@
 package com.example.payday.point.service;
 
+import com.example.payday.payment.discount.DiscountPolicy;
 import com.example.payday.payment.exception.InvalidPaymentException;
 import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
@@ -19,17 +20,21 @@ public class PointService {
 
     private final PointHistoryRepository pointHistoryRepository;
     private final UserRepository userRepository;
+    private final DiscountPolicy discountPolicy;
 
     @Transactional
     public void chargePoint(PointChargeRequestDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
+        int discountedAmount = discountPolicy.calculateDiscount(request.getAmount());
+
+
         user.addPoint(request.getAmount());
 
         PointHistory history = PointHistory.builder()
                 .user(user)
-                .amount(request.getAmount())
+                .amount(discountedAmount)
                 .type(PointHistoryType.CHARGE)
                 .currentPoint(user.getPoint())
                 .build();
