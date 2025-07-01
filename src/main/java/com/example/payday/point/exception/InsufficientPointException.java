@@ -1,11 +1,10 @@
 package com.example.payday.point.exception;
 
-public class InsufficientPointException extends RuntimeException {
-    public InsufficientPointException() {
-        super("포인트가 부족합니다.");
-    }
+import com.example.payday.global.exception.ErrorCode;
+import com.example.payday.global.exception.base.BusinessException;
 
-    public InsufficientPointException(String message) {
-        super(message);
+public class InsufficientPointException extends BusinessException {
+    public InsufficientPointException() {
+        super(ErrorCode.INSUFFICIENT_POINT);
     }
 }

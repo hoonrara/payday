@@ -1,5 +1,6 @@
 package com.example.payday.point.service;
 
+import com.example.payday.global.exception.ErrorCode;
 import com.example.payday.payment.discount.DiscountPolicy;
 import com.example.payday.payment.exception.InvalidPaymentException;
 import com.example.payday.point.domain.PointHistory;
@@ -48,7 +49,7 @@ public class PointService {
                 .orElseThrow(UserNotFoundException::new);
 
         if (user.getPoint() < amount) {
-            throw new InvalidPaymentException("포인트가 부족합니다.");
+            throw new InvalidPaymentException(ErrorCode.INSUFFICIENT_POINT);
         }
 
         user.usePoint(amount); // 포인트 차감
