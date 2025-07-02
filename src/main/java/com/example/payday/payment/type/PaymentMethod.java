@@ -1,5 +1,6 @@
 package com.example.payday.payment.type;
 
+import com.example.payday.payment.exception.UnsupportedPaymentMethodException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -19,6 +20,6 @@ public enum PaymentMethod {
                 return method;
             }
         }
-        throw new IllegalArgumentException("지원하지 않는 결제 방식입니다: " + value);
+        throw new UnsupportedPaymentMethodException();
     }
 }
