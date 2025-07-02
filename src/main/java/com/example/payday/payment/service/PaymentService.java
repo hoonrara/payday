@@ -10,6 +10,7 @@ import com.example.payday.payment.type.PaymentStatus;
 import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointChargeRequestDto;
+import com.example.payday.point.mapper.PointHistoryMapper;
 import com.example.payday.point.repository.PointHistoryRepository;
 import com.example.payday.user.domain.User;
 import com.example.payday.user.exception.UserNotFoundException;
@@ -49,12 +50,8 @@ public class PaymentService {
 
         user.addPoint(result.getAmount());
 
-        PointHistory history = PointHistory.builder()
-                .user(user)
-                .amount(result.getAmount())
-                .type(PointHistoryType.CHARGE)
-                .currentPoint(user.getPoint())
-                .build();
+        PointHistory history = PointHistoryMapper.toChargeHistory(user, result.getAmount());
+
 
         pointHistoryRepository.save(history);
     }
