@@ -1,5 +1,6 @@
 package com.example.payday.user.domain;
 
+import com.example.payday.point.exception.InsufficientPointException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class User {
 
     public void usePoint(int amount) {
         if (this.point < amount) {
-            throw new IllegalStateException("포인트 부족");
+            throw new InsufficientPointException();
         }
         this.point -= amount;
     }
