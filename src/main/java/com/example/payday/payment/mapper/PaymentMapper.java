@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMapper {
-    public PaymentRequestDto toPaymentRequest(PointChargeRequestDto request) {
+
+    public PaymentRequestDto toPaymentRequest(PointChargeRequestDto request, int finalAmount) {
         return new PaymentRequestDto(
                 request.getPaymentKey(),
                 request.getOrderId(),
-                request.getAmount(),
+                finalAmount,
                 request.getMethod()
         );
     }

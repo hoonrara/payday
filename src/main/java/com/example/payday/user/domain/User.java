@@ -21,9 +21,6 @@ public class User {
 
     private int point;
 
-//    @OneToOne(mappedBy = "user")
-//    private UserProfile userProfile;
-
     @Builder
     public User(String email, String password, int point) {
         this.email = email;
@@ -42,4 +39,6 @@ public class User {
         }
         this.point -= amount;
     }
+
+
 }

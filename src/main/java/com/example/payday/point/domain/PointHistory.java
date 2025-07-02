@@ -21,6 +21,8 @@ public class PointHistory {
     @Enumerated(EnumType.STRING)
     private PointHistoryType type;
 
+    private String orderId;
+
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
@@ -31,10 +33,11 @@ public class PointHistory {
     private User user;
 
     @Builder
-    public PointHistory(int amount, PointHistoryType type, User user, int currentPoint) {
+    public PointHistory(int amount, PointHistoryType type,String orderId, User user, int currentPoint) {
         this.amount = amount;
         this.type = type;
         this.user = user;
+        this.orderId = orderId;
         this.currentPoint = currentPoint;
         this.createdAt = LocalDateTime.now();
     }

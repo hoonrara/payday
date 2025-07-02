@@ -19,21 +19,12 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final CouponDiscountPolicyFactory policyFactory;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CouponResponseDto applyCoupon(CouponApplyRequestDto request) {
         Coupon coupon = couponRepository.findById(request.getCouponId())
                 .orElseThrow(CouponNotFoundException::new);
 
-        if (!coupon.isValid()) {
-            if (coupon.isUsed()) {
-                throw new CouponAlreadyUsedException();
-            }
-            throw new CouponExpiredException();
-        }
-
-        if (request.getOriginalAmount() < coupon.getMinOrderAmount()) {
-            throw new CouponMinimumAmountException();
-        }
+        validateCoupon(request.getOriginalAmount(), coupon);
 
         CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
         int discountedAmount = policy.calculateDiscount(
@@ -42,6 +33,56 @@ public class CouponService {
                 coupon.getMaxDiscountAmount()
         );
 
+        coupon.markUsed();
+
         return CouponMapper.toResponseDto(coupon, request.getOriginalAmount(), discountedAmount);
+    }
+
+    @Transactional
+    public int applyDiscount(Long couponId, int originalAmount) {
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(CouponNotFoundException::new);
+
+        validateCoupon(originalAmount, coupon);
+
+        CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
+        int discountedAmount = policy.calculateDiscount(
+                originalAmount,
+                coupon.getAmount(),
+                coupon.getMaxDiscountAmount()
+        );
+
+        coupon.markUsed();
+        return discountedAmount;
+    }
+
+    public int applyDiscountForPayment(Long couponId, int originalAmount) {
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(CouponNotFoundException::new);
+
+        validateCoupon(originalAmount, coupon);
+
+        CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
+        int discountedAmount = policy.calculateDiscount(
+                originalAmount,
+                coupon.getAmount(),
+                coupon.getMaxDiscountAmount()
+        );
+
+        coupon.markUsed();
+        return discountedAmount;
+    }
+
+    private void validateCoupon(int originalAmount, Coupon coupon) {
+        if (!coupon.isValid()) {
+            if (coupon.isUsed()) {
+                throw new CouponAlreadyUsedException();
+            }
+            throw new CouponExpiredException();
+        }
+
+        if (originalAmount < coupon.getMinOrderAmount()) {
+            throw new CouponMinimumAmountException();
+        }
     }
 }
