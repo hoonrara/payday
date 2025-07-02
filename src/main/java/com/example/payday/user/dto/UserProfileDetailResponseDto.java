@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class UserProfileDetailResponseDto {
 
     private String nickname;
-    private String description;
     private int viewCount;
     private LocalDateTime createdAt;
 }

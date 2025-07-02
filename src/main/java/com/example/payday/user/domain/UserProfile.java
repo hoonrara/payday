@@ -14,7 +14,6 @@ public class UserProfile {
     private Long id;
 
     private String nickname;
-    private String description;
     private int viewCount;
 
     private LocalDateTime createdAt;
@@ -24,9 +23,8 @@ public class UserProfile {
     private User user;
 
     @Builder
-    public UserProfile(String nickname, String description, User user) {
+    public UserProfile(String nickname, User user) {
         this.nickname = nickname;
-        this.description = description;
         this.user = user;
         this.viewCount = 0;
         this.createdAt = LocalDateTime.now();

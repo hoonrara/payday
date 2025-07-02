@@ -1,22 +1,11 @@
 package com.example.payday.coupon.mapper;
 
 import com.example.payday.coupon.domain.Coupon;
-import com.example.payday.coupon.dto.CouponCreateRequestDto;
+import com.example.payday.coupon.domain.CouponTemplate;
 import com.example.payday.coupon.dto.CouponResponseDto;
+import com.example.payday.user.domain.User;
 
 public class CouponMapper {
-
-    public static Coupon toEntity(CouponCreateRequestDto dto) {
-        return Coupon.builder()
-                .name(dto.getName())
-                .type(dto.getType())
-                .amount(dto.getAmount())
-                .expiredAt(dto.getExpiredAt())
-                .minOrderAmount(dto.getMinOrderAmount())
-                .maxDiscountAmount(dto.getMaxDiscountAmount())
-                .user(null) // 인증/인가 생략 조건
-                .build();
-    }
 
     public static CouponResponseDto toResponseDto(Coupon coupon, int originalAmount, int discountedAmount) {
         return CouponResponseDto.builder()
@@ -24,6 +13,18 @@ public class CouponMapper {
                 .couponName(coupon.getType().name())
                 .originalAmount(originalAmount)
                 .discountedAmount(discountedAmount)
+                .build();
+    }
+
+    public static Coupon fromTemplate(CouponTemplate template, User user) {
+        return Coupon.builder()
+                .name(template.getName())
+                .type(template.getType())
+                .amount(template.getAmount())
+                .maxDiscountAmount(template.getMaxDiscountAmount())
+                .minOrderAmount(template.getMinOrderAmount())
+                .expiredAt(template.getExpiredAt())
+                .user(user)
                 .build();
     }
 }

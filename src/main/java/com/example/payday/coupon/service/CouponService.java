@@ -19,58 +19,43 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final CouponDiscountPolicyFactory policyFactory;
 
+    /**
+     * 내부 결제 로직 등에서 금액 반환용 (단순 금액 계산 + 사용 처리)
+     */
     @Transactional
-    public CouponResponseDto applyCoupon(CouponApplyRequestDto request) {
-        Coupon coupon = couponRepository.findById(request.getCouponId())
-                .orElseThrow(CouponNotFoundException::new);
-
-        validateCoupon(request.getOriginalAmount(), coupon);
-
-        CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
-        int discountedAmount = policy.calculateDiscount(
-                request.getOriginalAmount(),
-                coupon.getAmount(),
-                coupon.getMaxDiscountAmount()
-        );
+    public int applyDiscountForPayment(Long couponId, int originalAmount) {
+        Coupon coupon = getValidatedCoupon(couponId, originalAmount);
+        int discountedAmount = calculateDiscount(coupon, originalAmount);
 
         coupon.markUsed();
+        return discountedAmount;
+    }
+
+    @Transactional(readOnly = true)
+    public CouponResponseDto previewCoupon(CouponApplyRequestDto request) {
+        Coupon coupon = getValidatedCoupon(request.getCouponId(), request.getOriginalAmount());
+        int discountedAmount = calculateDiscount(coupon, request.getOriginalAmount());
 
         return CouponMapper.toResponseDto(coupon, request.getOriginalAmount(), discountedAmount);
     }
 
-    @Transactional
-    public int applyDiscount(Long couponId, int originalAmount) {
+    // ------------------- private 로직 -----------------------
+
+    private Coupon getValidatedCoupon(Long couponId, int originalAmount) {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(CouponNotFoundException::new);
 
         validateCoupon(originalAmount, coupon);
-
-        CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
-        int discountedAmount = policy.calculateDiscount(
-                originalAmount,
-                coupon.getAmount(),
-                coupon.getMaxDiscountAmount()
-        );
-
-        coupon.markUsed();
-        return discountedAmount;
+        return coupon;
     }
 
-    public int applyDiscountForPayment(Long couponId, int originalAmount) {
-        Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(CouponNotFoundException::new);
-
-        validateCoupon(originalAmount, coupon);
-
+    private int calculateDiscount(Coupon coupon, int originalAmount) {
         CouponDiscountPolicy policy = policyFactory.getPolicy(coupon.getType());
-        int discountedAmount = policy.calculateDiscount(
+        return policy.calculateDiscount(
                 originalAmount,
                 coupon.getAmount(),
                 coupon.getMaxDiscountAmount()
         );
-
-        coupon.markUsed();
-        return discountedAmount;
     }
 
     private void validateCoupon(int originalAmount, Coupon coupon) {

@@ -17,7 +17,6 @@ public class UserProfileMapper {
     public static UserProfileDetailResponseDto toDetailDto(UserProfile entity) {
         return UserProfileDetailResponseDto.builder()
                 .nickname(entity.getNickname())
-                .description(entity.getDescription())
                 .viewCount(entity.getViewCount())
                 .createdAt(entity.getCreatedAt())
                 .build();
