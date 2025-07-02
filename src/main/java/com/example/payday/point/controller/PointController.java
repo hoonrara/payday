@@ -1,10 +1,9 @@
 package com.example.payday.point.controller;
 
-import com.example.payday.point.dto.PointChargeRequestDto;
 import com.example.payday.point.service.PointService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/points")
@@ -13,9 +12,5 @@ public class PointController {
 
     private final PointService pointService;
 
-    @PostMapping("/charge")
-    public ResponseEntity<Void> chargePoint(@RequestBody PointChargeRequestDto request) {
-        pointService.chargePoint(request);
-        return ResponseEntity.ok().build();
-    }
+
 }

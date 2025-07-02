@@ -16,11 +16,22 @@ public class PointHistoryMapper {
                 .build();
     }
 
-    public static PointHistory toChargeHistory(User user, int amount) {
+    public static PointHistory toChargeHistory(User user, int amount, String orderId) {
         return PointHistory.builder()
                 .user(user)
                 .amount(amount)
                 .type(PointHistoryType.CHARGE)
+                .orderId(orderId)
+                .currentPoint(user.getPoint())
+                .build();
+    }
+
+    public static PointHistory toRefundHistory(User user, int amount, String orderId) {
+        return PointHistory.builder()
+                .user(user)
+                .amount(amount)
+                .type(PointHistoryType.REFUND)
+                .orderId(orderId)
                 .currentPoint(user.getPoint())
                 .build();
     }

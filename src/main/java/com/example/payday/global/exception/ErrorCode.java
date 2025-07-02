@@ -14,7 +14,9 @@ public enum ErrorCode {
     COUPON_ALREADY_USED("이미 사용된 쿠폰입니다.", HttpStatus.BAD_REQUEST),
     COUPON_EXPIRED("만료된 쿠폰입니다.", HttpStatus.BAD_REQUEST),
     COUPON_MINIMUM_AMOUNT("최소 주문 금액을 충족하지 않습니다.", HttpStatus.BAD_REQUEST),
-    UNSUPPORTED_COUPON_TYPE("지원하지 않는 쿠폰 타입입니다.", HttpStatus.BAD_REQUEST);
+    UNSUPPORTED_COUPON_TYPE("지원하지 않는 쿠폰 타입입니다.", HttpStatus.BAD_REQUEST),
+    HISTORY_NOT_FOUND("해당 주문의 충전 기록이 없습니다.", HttpStatus.NOT_FOUND),
+    COUPON_TEMPLATE_NOT_FOUND("존재하지 않는 쿠폰 템플릿입니다.", HttpStatus.NOT_FOUND);
 
 
 
