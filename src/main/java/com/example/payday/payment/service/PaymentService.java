@@ -1,5 +1,6 @@
 package com.example.payday.payment.service;
 
+import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.coupon.service.CouponService;
 import com.example.payday.payment.dto.PaymentResultDto;
 import com.example.payday.payment.exception.InvalidPaymentException;
@@ -48,8 +49,12 @@ public class PaymentService {
         }
 
         int finalAmount = request.getAmount();
+        Coupon appliedCoupon = null;
+
+        // 쿠폰 적용
         if (request.getCouponId() != null) {
             finalAmount = couponService.applyDiscountForPayment(request.getCouponId(), finalAmount);
+            appliedCoupon = couponService.getCouponById(request.getCouponId()); // Coupon 객체 조회
         }
 
         // 결제 요청
@@ -64,7 +69,12 @@ public class PaymentService {
 
         user.addPoint(result.getAmount());
 
-        PointHistory history = PointHistoryMapper.toChargeHistory(user, result.getAmount(), result.getOrderId());
+        PointHistory history = PointHistoryMapper.toChargeHistory(
+                user,
+                result.getAmount(),
+                result.getOrderId(),
+                appliedCoupon // 연관된 쿠폰 넣기
+        );
         pointHistoryRepository.save(history);
     }
 

@@ -32,6 +32,12 @@ public class CouponService {
     }
 
     @Transactional(readOnly = true)
+    public Coupon getCouponById(Long id) {
+        return couponRepository.findById(id)
+                .orElseThrow(CouponNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
     public CouponResponseDto previewCoupon(CouponApplyRequestDto request) {
         Coupon coupon = getValidatedCoupon(request.getCouponId(), request.getOriginalAmount());
         int discountedAmount = calculateDiscount(coupon, request.getOriginalAmount());

@@ -1,5 +1,6 @@
 package com.example.payday.point.mapper;
 
+import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointHistoryResponseDto;
@@ -16,13 +17,14 @@ public class PointHistoryMapper {
                 .build();
     }
 
-    public static PointHistory toChargeHistory(User user, int amount, String orderId) {
+    public static PointHistory toChargeHistory(User user, int amount, String orderId, Coupon coupon) {
         return PointHistory.builder()
                 .user(user)
                 .amount(amount)
                 .type(PointHistoryType.CHARGE)
                 .orderId(orderId)
                 .currentPoint(user.getPoint())
+                .coupon(coupon)
                 .build();
     }
 
