@@ -9,7 +9,7 @@ public class CouponTemplateMapper {
     public static CouponTemplate toEntity(CouponTemplateCreateRequestDto dto) {
         return CouponTemplate.builder()
                 .name(dto.getName())
-                .type(dto.getType())
+                .type(dto.getDiscountType())
                 .amount(dto.getAmount())
                 .maxDiscountAmount(dto.getMaxDiscountAmount())
                 .minOrderAmount(dto.getMinOrderAmount())
@@ -21,7 +21,7 @@ public class CouponTemplateMapper {
         return CouponTemplateResponseDto.builder()
                 .id(template.getId())
                 .name(template.getName())
-                .type(template.getType())
+                .discountType(template.getType())
                 .amount(template.getAmount())
                 .maxDiscountAmount(template.getMaxDiscountAmount())
                 .minOrderAmount(template.getMinOrderAmount())

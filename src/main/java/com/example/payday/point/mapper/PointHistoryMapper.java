@@ -1,5 +1,6 @@
 package com.example.payday.point.mapper;
 
+import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointHistoryResponseDto;
@@ -9,27 +10,32 @@ public class PointHistoryMapper {
 
     public static PointHistoryResponseDto toDto(PointHistory entity) {
         return PointHistoryResponseDto.builder()
-                .amount(entity.getAmount())
+                .pointAmount(entity.getPointAmount())  // ✅ 수정
                 .type(entity.getType())
                 .currentPoint(entity.getCurrentPoint())
                 .createdAt(entity.getCreatedAt())
+                .orderId(entity.getOrderId())                           // ✅ 추가
+                .couponId(entity.getCoupon() != null                   // ✅ 추가
+                        ? entity.getCoupon().getId() : null)
                 .build();
     }
 
-    public static PointHistory toChargeHistory(User user, int amount, String orderId) {
+    public static PointHistory toChargeHistory(User user, int pointAmount, int paidAmount, String orderId, Coupon coupon) {
         return PointHistory.builder()
                 .user(user)
-                .amount(amount)
+                .pointAmount(pointAmount)
+                .paidAmount(paidAmount)
                 .type(PointHistoryType.CHARGE)
                 .orderId(orderId)
                 .currentPoint(user.getPoint())
+                .coupon(coupon)
                 .build();
     }
 
-    public static PointHistory toRefundHistory(User user, int amount, String orderId) {
+    public static PointHistory toRefundHistory(User user, int pointAmount, String orderId) {
         return PointHistory.builder()
                 .user(user)
-                .amount(amount)
+                .pointAmount(pointAmount)
                 .type(PointHistoryType.REFUND)
                 .orderId(orderId)
                 .currentPoint(user.getPoint())

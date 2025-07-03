@@ -28,7 +28,13 @@ public class CouponService {
         int discountedAmount = calculateDiscount(coupon, originalAmount);
 
         coupon.markUsed();
-        return discountedAmount;
+        return originalAmount-discountedAmount;
+    }
+
+    @Transactional(readOnly = true)
+    public Coupon getCouponById(Long id) {
+        return couponRepository.findById(id)
+                .orElseThrow(CouponNotFoundException::new);
     }
 
     @Transactional(readOnly = true)

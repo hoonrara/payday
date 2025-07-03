@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class CouponTemplateResponseDto {
     private Long id;
     private String name;
-    private CouponType type;
+    private CouponType discountType;
     private int amount;
     private Integer maxDiscountAmount;
     private int minOrderAmount;

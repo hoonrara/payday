@@ -33,8 +33,12 @@ public class Coupon {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id")
+    private CouponTemplate template;
+
     @Builder
-    public Coupon(String name, CouponType type, int amount, LocalDateTime expiredAt, int minOrderAmount, Integer maxDiscountAmount, User user) {
+    public Coupon(String name, CouponType type, int amount, LocalDateTime expiredAt, int minOrderAmount, Integer maxDiscountAmount, User user, CouponTemplate template) {
         this.name = name;
         this.type = type;
         this.amount = amount;
@@ -42,6 +46,7 @@ public class Coupon {
         this.minOrderAmount = minOrderAmount;
         this.maxDiscountAmount = maxDiscountAmount;
         this.user = user;
+        this.template = template;
         this.used = false;
     }
 

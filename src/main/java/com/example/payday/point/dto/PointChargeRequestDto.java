@@ -9,7 +9,7 @@ public class PointChargeRequestDto {
     private Long userId;
     private String paymentKey;
     private String orderId;
-    private int amount;
+    private int pointAmount;
     private String method;
     private Long couponId;
 }

@@ -6,17 +6,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class CouponDiscountPolicyFactory {
 
-    private final ApplicationContext context;
+    private final Map<String, CouponDiscountPolicy> policyMap;
 
     public CouponDiscountPolicy getPolicy(CouponType type) {
-        try {
-            return (CouponDiscountPolicy) context.getBean(type.name());
-        } catch (Exception e) {
-            throw new UnsupportedCouponTypeException();
-        }
+        CouponDiscountPolicy policy = policyMap.get(type.name());
+        if (policy == null) throw new UnsupportedCouponTypeException();
+        return policy;
     }
 }

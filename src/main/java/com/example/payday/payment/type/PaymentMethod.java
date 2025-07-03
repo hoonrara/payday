@@ -8,15 +8,15 @@ public enum PaymentMethod {
     TOSS("toss"),
     FAKE("fake");
 
-    private final String value;
+    private final String gatewayBeanName;
 
-    public String getValue() {
-        return value;
+    public String getBeanName() {
+        return gatewayBeanName;
     }
 
     public static PaymentMethod from(String value) {
         for (PaymentMethod method : PaymentMethod.values()) {
-            if (method.getValue().equalsIgnoreCase(value)) {
+            if (method.gatewayBeanName.equalsIgnoreCase(value)) {
                 return method;
             }
         }
