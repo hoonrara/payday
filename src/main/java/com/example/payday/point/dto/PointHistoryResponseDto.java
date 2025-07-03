@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class PointHistoryResponseDto {
-    private int amount;
     private PointHistoryType type;
     private int currentPoint;
     private LocalDateTime createdAt;
+    private String orderId;     // ✅ 주문 ID 추가
+    private Long couponId;      // ✅ 쿠폰 ID 추가
+    private int pointAmount;
 }

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CouponTemplateCreateRequestDto {
     private String name;
-    private CouponType type;
+    private CouponType discountType;
     private int amount;
     private Integer maxDiscountAmount;
     private int minOrderAmount;

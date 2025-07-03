@@ -10,7 +10,7 @@ public class CouponMapper {
     public static CouponResponseDto toResponseDto(Coupon coupon, int originalAmount, int discountedAmount) {
         return CouponResponseDto.builder()
                 .couponId(coupon.getId())
-                .couponName(coupon.getType().name())
+                .couponName(coupon.getName())
                 .originalAmount(originalAmount)
                 .discountedAmount(discountedAmount)
                 .build();
@@ -25,6 +25,7 @@ public class CouponMapper {
                 .minOrderAmount(template.getMinOrderAmount())
                 .expiredAt(template.getExpiredAt())
                 .user(user)
+                .template(template)
                 .build();
     }
 }

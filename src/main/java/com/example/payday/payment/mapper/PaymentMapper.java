@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaymentMapper {
 
-    public PaymentRequestDto toPaymentRequest(PointChargeRequestDto request, int finalAmount) {
+    public PaymentRequestDto toPaymentRequest(PointChargeRequestDto request, int finalAmount, String orderId) {
         return new PaymentRequestDto(
                 request.getPaymentKey(),
-                request.getOrderId(),
+                orderId,
                 finalAmount,
                 request.getMethod()
         );

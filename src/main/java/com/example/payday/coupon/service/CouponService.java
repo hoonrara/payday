@@ -28,7 +28,7 @@ public class CouponService {
         int discountedAmount = calculateDiscount(coupon, originalAmount);
 
         coupon.markUsed();
-        return discountedAmount;
+        return originalAmount-discountedAmount;
     }
 
     @Transactional(readOnly = true)

@@ -17,14 +17,17 @@ public class PointHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int amount;
+    private int pointAmount;
 
     @Enumerated(EnumType.STRING)
     private PointHistoryType type;
 
+    @Column(unique = true)
     private String orderId;
 
     private LocalDateTime createdAt;
+
+    private int paidAmount;
 
     @Column(nullable = false)
     private int currentPoint = 0;
@@ -38,10 +41,11 @@ public class PointHistory {
     private Coupon coupon;
 
     @Builder
-    public PointHistory(int amount, PointHistoryType type,String orderId, User user, int currentPoint, Coupon coupon) {
-        this.amount = amount;
+    public PointHistory(int pointAmount, PointHistoryType type,String orderId, User user,int paidAmount, int currentPoint, Coupon coupon) {
+        this.pointAmount = pointAmount;
         this.type = type;
         this.user = user;
+        this.paidAmount = paidAmount;
         this.orderId = orderId;
         this.currentPoint = currentPoint;
         this.coupon = coupon;
