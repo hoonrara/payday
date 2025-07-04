@@ -7,6 +7,7 @@ import com.example.payday.point.dto.RefundRequestDto;
 import com.example.payday.point.dto.RefundResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,14 +19,14 @@ public class PaymentController {
 
     // 결제 수단(Toss 등)으로 충전
     @PostMapping("/charge")
-    public ResponseEntity<PaymentResultDto> charge(@RequestBody PointChargeRequestDto request) {
+    public ResponseEntity<PaymentResultDto> charge(@RequestBody @Validated PointChargeRequestDto request) {
         PaymentResultDto result = paymentService.chargePoint(request);
         return ResponseEntity.ok(result);
     }
 
     // 결제 환불 및 포인트 차감
     @PostMapping("/refund")
-    public ResponseEntity<RefundResultDto> refund(@RequestBody RefundRequestDto request) {
+    public ResponseEntity<RefundResultDto> refund(@RequestBody @Validated RefundRequestDto request) {
         RefundResultDto result = paymentService.refundPoint(request);
         return ResponseEntity.ok(result);
     }

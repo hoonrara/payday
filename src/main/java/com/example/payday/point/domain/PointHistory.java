@@ -30,7 +30,7 @@ public class PointHistory {
     private int paidAmount;
 
     @Column(nullable = false)
-    private int currentPoint = 0;
+    private int remainPoint = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -41,13 +41,13 @@ public class PointHistory {
     private Coupon coupon;
 
     @Builder
-    public PointHistory(int pointAmount, PointHistoryType type,String orderId, User user,int paidAmount, int currentPoint, Coupon coupon) {
+    public PointHistory(int pointAmount, PointHistoryType type, String orderId, User user, int paidAmount, int remainPoint, Coupon coupon) {
         this.pointAmount = pointAmount;
         this.type = type;
         this.user = user;
         this.paidAmount = paidAmount;
         this.orderId = orderId;
-        this.currentPoint = currentPoint;
+        this.remainPoint = remainPoint;
         this.coupon = coupon;
         this.createdAt = LocalDateTime.now();
     }

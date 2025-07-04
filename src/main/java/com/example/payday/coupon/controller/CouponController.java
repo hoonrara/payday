@@ -3,8 +3,11 @@ package com.example.payday.coupon.controller;
 import com.example.payday.coupon.dto.CouponApplyRequestDto;
 import com.example.payday.coupon.dto.CouponResponseDto;
 import com.example.payday.coupon.service.CouponService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public class CouponController {
      * 쿠폰 미리보기 (얼마 할인되는지 확인)
      */
     @PostMapping("/preview")
-    public ResponseEntity<CouponResponseDto> previewCoupon(@RequestBody CouponApplyRequestDto request) {
+    public ResponseEntity<CouponResponseDto> previewCoupon(@RequestBody @Validated CouponApplyRequestDto request) {
         CouponResponseDto response = couponService.previewCoupon(request);
         return ResponseEntity.ok(response);
     }
