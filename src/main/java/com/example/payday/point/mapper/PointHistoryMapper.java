@@ -12,7 +12,7 @@ public class PointHistoryMapper {
         return PointHistoryResponseDto.builder()
                 .pointAmount(entity.getPointAmount())  // ✅ 수정
                 .type(entity.getType())
-                .currentPoint(entity.getCurrentPoint())
+                .remainPoint(entity.getRemainPoint())
                 .createdAt(entity.getCreatedAt())
                 .orderId(entity.getOrderId())                           // ✅ 추가
                 .couponId(entity.getCoupon() != null                   // ✅ 추가
@@ -27,7 +27,7 @@ public class PointHistoryMapper {
                 .paidAmount(paidAmount)
                 .type(PointHistoryType.CHARGE)
                 .orderId(orderId)
-                .currentPoint(user.getPoint())
+                .remainPoint(user.getPoint())
                 .coupon(coupon)
                 .build();
     }
@@ -38,7 +38,7 @@ public class PointHistoryMapper {
                 .pointAmount(pointAmount)
                 .type(PointHistoryType.REFUND)
                 .orderId(orderId)
-                .currentPoint(user.getPoint())
+                .remainPoint(user.getPoint())
                 .build();
     }
 }

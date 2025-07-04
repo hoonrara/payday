@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PointHistoryResponseDto {
     private PointHistoryType type;
-    private int currentPoint;
+    private int remainPoint;
     private LocalDateTime createdAt;
     private String orderId;     // ✅ 주문 ID 추가
     private Long couponId;      // ✅ 쿠폰 ID 추가
