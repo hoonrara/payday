@@ -8,9 +8,14 @@ import com.example.payday.coupon.mapper.CouponMapper;
 import com.example.payday.coupon.policy.CouponDiscountPolicy;
 import com.example.payday.coupon.policy.CouponDiscountPolicyFactory;
 import com.example.payday.coupon.repository.CouponRepository;
+import com.example.payday.user.domain.User;
+import com.example.payday.user.exception.UserNotFoundException;
+import com.example.payday.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponDiscountPolicyFactory policyFactory;
+    private final UserRepository userRepository; // ✅ 반드시 주입 필요
 
     /**
      * 내부 결제 로직 등에서 금액 반환용 (단순 금액 계산 + 사용 처리)
@@ -28,24 +34,47 @@ public class CouponService {
         int discountedAmount = calculateDiscount(coupon, originalAmount);
 
         coupon.markUsed();
-        return originalAmount-discountedAmount;
+        return originalAmount - discountedAmount;
     }
 
+    /**
+     * 단일 쿠폰 ID로 조회
+     */
     @Transactional(readOnly = true)
     public Coupon getCouponById(Long id) {
         return couponRepository.findById(id)
                 .orElseThrow(CouponNotFoundException::new);
     }
 
+    /**
+     * 쿠폰 미리보기 (할인 금액 계산)
+     */
     @Transactional(readOnly = true)
     public CouponResponseDto previewCoupon(CouponApplyRequestDto request) {
         Coupon coupon = getValidatedCoupon(request.getCouponId(), request.getOriginalAmount());
-        int discountedAmount = calculateDiscount(coupon, request.getOriginalAmount());
+
+        int discountAmount = calculateDiscount(coupon, request.getOriginalAmount());
+        int discountedAmount = request.getOriginalAmount() - discountAmount;
 
         return CouponMapper.toResponseDto(coupon, request.getOriginalAmount(), discountedAmount);
     }
 
-    // ------------------- private 로직 -----------------------
+    /**
+     * 사용자의 발급된 쿠폰 전체 조회
+     */
+    @Transactional(readOnly = true)
+    public List<CouponResponseDto> getCouponsByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Coupon> coupons = couponRepository.findByUser(user);
+
+        return coupons.stream()
+                .map(c -> CouponMapper.toResponseDto(c, 0, 0)) // 금액 미리보기 아님
+                .toList();
+    }
+
+    // ------------------- private -----------------------
 
     private Coupon getValidatedCoupon(Long couponId, int originalAmount) {
         Coupon coupon = couponRepository.findById(couponId)

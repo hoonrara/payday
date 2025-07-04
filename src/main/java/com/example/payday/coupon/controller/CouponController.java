@@ -7,19 +7,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/coupons")
-public class CouponPreviewController {
+public class CouponController {
 
     private final CouponService couponService;
 
     /**
-     * 쿠폰 미리보기 (적용 가능한지, 얼마 할인되는지 확인)
+     * 쿠폰 미리보기 (얼마 할인되는지 확인)
      */
     @PostMapping("/preview")
     public ResponseEntity<CouponResponseDto> previewCoupon(@RequestBody CouponApplyRequestDto request) {
-        CouponResponseDto result = couponService.previewCoupon(request);
-        return ResponseEntity.ok(result);
+        CouponResponseDto response = couponService.previewCoupon(request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 유저가 보유한 쿠폰 목록 조회
+     */
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<CouponResponseDto>> getUserCoupons(@PathVariable Long userId) {
+        List<CouponResponseDto> responses = couponService.getCouponsByUser(userId);
+        return ResponseEntity.ok(responses);
     }
 }
