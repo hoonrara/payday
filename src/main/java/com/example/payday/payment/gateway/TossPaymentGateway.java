@@ -1,10 +1,8 @@
 package com.example.payday.payment.gateway;
 
-import com.example.payday.global.exception.ErrorCode;
 import com.example.payday.payment.dto.PaymentRequestDto;
 import com.example.payday.payment.dto.PaymentResultDto;
 import com.example.payday.payment.exception.InvalidPaymentException;
-import com.example.payday.payment.type.PaymentMethod;
 import com.example.payday.payment.type.PaymentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Map;
 
@@ -51,11 +51,11 @@ public class TossPaymentGateway implements PaymentGateway {
 
             if (response.getStatusCode() == HttpStatus.OK && body != null) {
                 return PaymentResultDto.builder()
-                        .orderId((String) body.get("orderId"))
                         .paymentKey((String) body.get("paymentKey"))
-                        .method(PaymentMethod.TOSS)
-                        .amount((Integer) body.get("totalAmount"))
+                        .orderId((String) body.get("orderId"))
+                        .amount((Integer) body.get("amount"))
                         .status(PaymentStatus.DONE)
+                        .approvedAt(parseApprovedAt(body.get("approvedAt")))
                         .build();
             } else {
                 throw new InvalidPaymentException();
@@ -63,6 +63,15 @@ public class TossPaymentGateway implements PaymentGateway {
         } catch (Exception e) {
             log.error("Toss 결제 오류", e);
             throw new InvalidPaymentException();
+        }
+    }
+
+    private LocalDateTime parseApprovedAt(Object approvedAtRaw) {
+        try {
+            return LocalDateTime.parse((String) approvedAtRaw, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } catch (Exception e) {
+            log.warn("approvedAt 파싱 실패, 현재 시간으로 대체", e);
+            return LocalDateTime.now();
         }
     }
 }

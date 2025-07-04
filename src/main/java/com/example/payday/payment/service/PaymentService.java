@@ -15,6 +15,7 @@ import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointChargeRequestDto;
 import com.example.payday.point.dto.RefundRequestDto;
+import com.example.payday.point.dto.RefundResultDto;
 import com.example.payday.point.exception.DuplicateOrderIdException;
 import com.example.payday.point.exception.InsufficientPointException;
 import com.example.payday.point.exception.PointHistoryNotFoundException;
@@ -45,75 +46,77 @@ public class PaymentService {
      * 실제 결제 → 포인트 충전
      */
     @Transactional
-    public void chargePoint(PointChargeRequestDto request) {
+    public PaymentResultDto chargePoint(PointChargeRequestDto request) {
+        // 1. 결제 수단 처리
         PaymentMethod method = PaymentMethod.from(request.getMethod());
         PaymentGateway gateway = gatewayMap.get(method.getBeanName());
-
         if (gateway == null) {
             throw new UnsupportedPaymentMethodException();
         }
 
-        // 1. 주문 ID 생성
+        // 2. 주문 ID 생성 및 중복 확인
         String orderId = OrderIdGenerator.generate(request.getUserId());
         if (pointHistoryRepository.existsByOrderId(orderId)) {
             throw new DuplicateOrderIdException();
         }
 
-        // 2. 충전 포인트 수치
-        int pointAmount = request.getPointAmount(); // ✅ 변경됨
+        // 3. 충전 포인트 계산
+        int pointAmount = request.getPointAmount();
         int discountedAmount = pointAmount;
         Coupon appliedCoupon = null;
 
-        // 3. 쿠폰 할인 적용
+        // 4. 쿠폰 적용
         if (request.getCouponId() != null) {
             discountedAmount = couponService.applyDiscountForPayment(request.getCouponId(), pointAmount);
             appliedCoupon = couponService.getCouponById(request.getCouponId());
         }
 
-        // 4. 전역 할인 정책 적용
+        // 5. 전역 할인 정책 적용
         int finalPaidAmount = discountPolicy.calculateDiscount(discountedAmount);
 
-        // 5. 결제 수행
+        // 6. 결제 수행
         PaymentResultDto result = gateway.pay(paymentMapper.toPaymentRequest(request, finalPaidAmount, orderId));
         if (result.getStatus() != PaymentStatus.DONE) {
             throw new InvalidPaymentException();
         }
 
-        // 6. 유저 포인트 적립
+        // 7. 유저 포인트 적립
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
         pointService.saveChargeHistory(user, pointAmount, finalPaidAmount, orderId, appliedCoupon);
+
+        // 8. 결제 결과 반환
+        return result;
     }
+
 
     /**
      * 결제 기반 환불 처리
      */
     @Transactional
-    public void refundPoint(RefundRequestDto request) {
+    public RefundResultDto refundPoint(RefundRequestDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
         String originalOrderId = request.getOrderId();
         String refundOrderId = originalOrderId + "-REFUND";
 
-        // 환불 중복 방지
         if (pointHistoryRepository.existsByOrderId(refundOrderId)) {
             throw new DuplicateOrderIdException();
         }
 
-        // 기존 충전 이력 조회
         PointHistory chargeHistory = pointHistoryRepository
                 .findByOrderIdAndType(originalOrderId, PointHistoryType.CHARGE)
                 .orElseThrow(PointHistoryNotFoundException::new);
 
-        int refundAmount = chargeHistory.getPointAmount(); // ✅ 변경됨
+        int refundAmount = chargeHistory.getPointAmount();
 
         if (user.getPoint() < refundAmount) {
             throw new InsufficientPointException();
         }
 
-        // 환불 기록 저장 (refundOrderId로 저장!)
-        pointService.saveRefundHistory(user, refundAmount, refundOrderId);
+        // ✅ 변경된 부분: 환불 결과 응답 반환
+        return pointService.saveRefundHistory(user, refundAmount, refundOrderId);
     }
 }

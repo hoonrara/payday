@@ -6,26 +6,28 @@ import com.example.payday.user.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/profiles")
 @RequiredArgsConstructor
+@RequestMapping("/api/profiles")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
     @GetMapping
-    public Page<UserProfileListResponseDto> getProfiles(
+    public ResponseEntity<Page<UserProfileListResponseDto>> getProfiles(
             @RequestParam(defaultValue = "date") String sortKey,
-            Pageable pageable) {
-        return userProfileService.getAllProfiles(sortKey, pageable);
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(userProfileService.getAllProfiles(sortKey, pageable));
     }
 
     @GetMapping("/{userId}")
-    public UserProfileDetailResponseDto getProfileDetail(@PathVariable Long userId) {
-        return userProfileService.getProfileDetail(userId);
+    public ResponseEntity<UserProfileDetailResponseDto> getProfileDetail(@PathVariable Long userId) {
+        return ResponseEntity.ok(userProfileService.getProfileDetail(userId));
     }
 }
