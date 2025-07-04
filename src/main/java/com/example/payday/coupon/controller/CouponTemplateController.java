@@ -6,6 +6,7 @@ import com.example.payday.coupon.service.CouponTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class CouponTemplateController {
     private final CouponTemplateService service;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CouponTemplateCreateRequestDto dto) {
+    public ResponseEntity<Void> create(@RequestBody @Validated CouponTemplateCreateRequestDto dto) {
         service.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
