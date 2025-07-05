@@ -6,6 +6,7 @@ import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,9 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Long
     boolean existsByOrderId(String orderId);
 
     List<PointHistory> findAllByCreatedAtAfter(LocalDateTime time);
+
+    @EntityGraph(attributePaths = {"user"})
+    Page<PointHistory> findAllBy(Pageable pageable);
 
 
 

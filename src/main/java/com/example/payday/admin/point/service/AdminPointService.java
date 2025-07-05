@@ -1,5 +1,6 @@
 package com.example.payday.admin.point.service;
 
+import com.example.payday.admin.point.dto.AdminPointHistoryDto;
 import com.example.payday.admin.point.dto.AdminPointHistorySummaryDto;
 import com.example.payday.admin.point.dto.AdminPointMonthlyTotalSummaryDto;
 import com.example.payday.admin.point.mapper.AdminPointMapper;
@@ -32,6 +33,10 @@ public class AdminPointService {
         Page<PointHistory> historyPage = pointHistoryRepository.findAllByUser(user, pageable);
 
         return AdminPointMapper.toSummaryDto(user, historyPage);
+    }
+    public Page<AdminPointHistoryDto> getAllHistories(Pageable pageable) {
+        Page<PointHistory> histories = pointHistoryRepository.findAllBy(pageable);
+        return histories.map(AdminPointMapper::toDto);
     }
 
     public AdminPointMonthlyTotalSummaryDto getMonthlyTotalSummary() {

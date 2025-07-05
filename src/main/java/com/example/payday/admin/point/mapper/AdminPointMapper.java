@@ -1,5 +1,6 @@
 package com.example.payday.admin.point.mapper;
 
+import com.example.payday.admin.point.dto.AdminPointHistoryDto;
 import com.example.payday.admin.point.dto.AdminPointHistorySummaryDto;
 import com.example.payday.admin.point.dto.AdminPointMonthlyTotalSummaryDto;
 import com.example.payday.point.domain.PointHistory;
@@ -16,6 +17,17 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AdminPointMapper {
+
+    public static AdminPointHistoryDto toDto(PointHistory entity) {
+        return AdminPointHistoryDto.builder()
+                .orderId(entity.getOrderId())
+                .userId(entity.getUser().getId())
+                .email(entity.getUser().getEmail())
+                .pointAmount(entity.getPointAmount())
+                .type(entity.getType())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
 
     public static AdminPointHistorySummaryDto toSummaryDto(User user, Page<PointHistory> historyPage) {
         int totalCharge = historyPage.stream()
