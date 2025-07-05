@@ -3,6 +3,8 @@ package com.example.payday.coupon.controller;
 import com.example.payday.coupon.dto.CouponApplyRequestDto;
 import com.example.payday.coupon.dto.CouponResponseDto;
 import com.example.payday.coupon.service.CouponService;
+import com.example.payday.global.dto.PagedResponse;
+import com.example.payday.global.mapper.PagedResponseMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -34,11 +36,11 @@ public class CouponController {
      * 유저가 보유한 쿠폰 목록 조회
      */
     @GetMapping("/users/{userId}")
-    public ResponseEntity<Page<CouponResponseDto>> getUserCoupons(
+    public ResponseEntity<PagedResponse<CouponResponseDto>> getUserCoupons(
             @PathVariable Long userId,
             Pageable pageable
     ) {
         Page<CouponResponseDto> responses = couponService.getCouponsByUser(userId, pageable);
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(PagedResponseMapper.toResponse(responses));
     }
 }
