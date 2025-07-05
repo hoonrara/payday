@@ -1,5 +1,7 @@
 package com.example.payday.point.controller;
 
+import com.example.payday.global.dto.PagedResponse;
+import com.example.payday.global.mapper.PagedResponseMapper;
 import com.example.payday.point.dto.PointHistoryResponseDto;
 import com.example.payday.point.service.PointService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,11 @@ public class PointController {
     private final PointService pointService;
 
     @GetMapping("/histories")
-    public ResponseEntity<Page<PointHistoryResponseDto>> getHistories(
+    public ResponseEntity<PagedResponse<PointHistoryResponseDto>> getHistories(
             @PathVariable Long userId,
-            Pageable pageable) {
-        return ResponseEntity.ok(pointService.getHistories(userId, pageable));
+            Pageable pageable
+    ) {
+        Page<PointHistoryResponseDto> histories = pointService.getHistories(userId, pageable);
+        return ResponseEntity.ok(PagedResponseMapper.toResponse(histories));
     }
 }
