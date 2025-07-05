@@ -10,6 +10,8 @@ import com.example.payday.user.domain.User;
 import com.example.payday.user.exception.UserNotFoundException;
 import com.example.payday.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +25,13 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-    public List<PointHistoryResponseDto> getHistories(Long userId) {
+    public Page<PointHistoryResponseDto> getHistories(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<PointHistory> histories = pointHistoryRepository.findAllByUser(user);
+        Page<PointHistory> histories = pointHistoryRepository.findAllByUser(user, pageable);
 
-        return histories.stream()
-                .map(PointHistoryMapper::toDto)
-                .collect(Collectors.toList());
+        return histories.map(PointHistoryMapper::toDto);
     }
 
     @Transactional

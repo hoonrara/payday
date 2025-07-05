@@ -5,6 +5,7 @@ import com.example.payday.global.exception.base.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +33,26 @@ public class GlobalExceptionHandler {
                 .status(code.getStatus())
                 .body(new ErrorResponse(
                         code.getMessage(),
+                        code.name(),
+                        code.getStatus().value()
+                ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+        String errorMessage = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("유효성 검사 실패");
+
+        ErrorCode code = ErrorCode.INVALID_REQUEST;
+
+        return ResponseEntity
+                .status(code.getStatus())
+                .body(new ErrorResponse(
+                        errorMessage,
                         code.name(),
                         code.getStatus().value()
                 ));

@@ -12,6 +12,8 @@ import com.example.payday.user.domain.User;
 import com.example.payday.user.exception.UserNotFoundException;
 import com.example.payday.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,15 +65,14 @@ public class CouponService {
      * 사용자의 발급된 쿠폰 전체 조회
      */
     @Transactional(readOnly = true)
-    public List<CouponResponseDto> getCouponsByUser(Long userId) {
+    public Page<CouponResponseDto> getCouponsByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Coupon> coupons = couponRepository.findByUser(user);
+        Page<Coupon> coupons = couponRepository.findByUser(user, pageable);
 
-        return coupons.stream()
-                .map(c -> CouponMapper.toResponseDto(c, 0, 0)) // 금액 미리보기 아님
-                .toList();
+        // ✅ Page<Coupon> → Page<CouponResponseDto> 로 변환
+        return coupons.map(c -> CouponMapper.toResponseDto(c, 0, 0)); // 할인 미리보기 적용 안함
     }
 
     // ------------------- private -----------------------

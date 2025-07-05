@@ -1,8 +1,8 @@
-package com.example.payday.coupon.mapper;
+package com.example.payday.admin.coupon.mapper;
 
+import com.example.payday.admin.coupon.dto.CouponTemplateCreateRequestDto;
+import com.example.payday.admin.coupon.dto.CouponTemplateResponseDto;
 import com.example.payday.coupon.domain.CouponTemplate;
-import com.example.payday.coupon.dto.CouponTemplateCreateRequestDto;
-import com.example.payday.coupon.dto.CouponTemplateResponseDto;
 
 public class CouponTemplateMapper {
 

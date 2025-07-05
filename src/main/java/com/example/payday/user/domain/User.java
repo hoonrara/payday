@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,8 +20,18 @@ public class User {
 
     private String email;
     private String password;
-
     private int point;
+
+
+    //관리자만 볼 수 있음 (로직은 추후 구현예정)
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
+    @Column(name = "is_suspended")
+    private boolean isSuspended = false;
+    @Column(name = "report_count")
+    private int reportCount = 0;
+
+
 
     @Builder
     public User(String email, String password, int point) {

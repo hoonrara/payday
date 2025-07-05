@@ -1,6 +1,7 @@
 package com.example.payday.user.service;
 
 
+import com.example.payday.coupon.service.CouponIssueService;
 import com.example.payday.user.domain.UserProfile;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
+    private final CouponIssueService couponIssueService;
 
     @Transactional(readOnly = true)
     public Page<UserProfileListResponseDto> getAllProfiles(String sortKey, Pageable pageable) {
@@ -33,6 +35,9 @@ public class UserProfileService {
                 .orElseThrow(UserNotFoundException::new);
 
         profile.increaseViewCount();
+
+        couponIssueService.issueAutoCoupons(profile.getUser(), profile.getViewCount());
+
         return UserProfileMapper.toDetailDto(profile);
     }
 }

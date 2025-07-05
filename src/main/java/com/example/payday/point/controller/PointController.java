@@ -3,6 +3,8 @@ package com.example.payday.point.controller;
 import com.example.payday.point.dto.PointHistoryResponseDto;
 import com.example.payday.point.service.PointService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,9 @@ public class PointController {
     private final PointService pointService;
 
     @GetMapping("/histories")
-    public ResponseEntity<List<PointHistoryResponseDto>> getHistories(@PathVariable Long userId) {
-        return ResponseEntity.ok(pointService.getHistories(userId));
+    public ResponseEntity<Page<PointHistoryResponseDto>> getHistories(
+            @PathVariable Long userId,
+            Pageable pageable) {
+        return ResponseEntity.ok(pointService.getHistories(userId, pageable));
     }
 }
