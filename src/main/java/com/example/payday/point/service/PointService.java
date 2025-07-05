@@ -25,7 +25,7 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-    public Page<PointHistoryResponseDto> getHistories(Long userId, Pageable pageable) {
+    public Page<PointHistoryResponseDto> getPointHistoriesByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 

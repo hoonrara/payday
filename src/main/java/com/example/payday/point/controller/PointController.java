@@ -27,7 +27,7 @@ public class PointController {
             @PathVariable Long userId,
             Pageable pageable
     ) {
-        Page<PointHistoryResponseDto> histories = pointService.getHistories(userId, pageable);
+        Page<PointHistoryResponseDto> histories = pointService.getPointHistoriesByUser(userId, pageable);
         return ResponseEntity.ok(PagedResponseMapper.toResponse(histories));
     }
 }
