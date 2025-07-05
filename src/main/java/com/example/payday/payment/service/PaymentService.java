@@ -37,7 +37,6 @@ public class PaymentService {
     private final Map<String, PaymentGateway> gatewayMap;
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
-    private final PaymentMapper paymentMapper;
     private final CouponService couponService;
     private final DiscountPolicy discountPolicy;
     private final PointService pointService;
@@ -75,7 +74,10 @@ public class PaymentService {
         int finalPaidAmount = discountPolicy.calculateDiscount(discountedAmount);
 
         // 6. 결제 수행
-        PaymentResultDto result = gateway.pay(paymentMapper.toPaymentRequest(request, finalPaidAmount, orderId));
+        PaymentResultDto result = gateway.pay(
+                PaymentMapper.toPaymentRequest(request, finalPaidAmount, orderId)
+        );
+
         if (result.getStatus() != PaymentStatus.DONE) {
             throw new InvalidPaymentException();
         }
@@ -89,7 +91,6 @@ public class PaymentService {
         // 8. 결제 결과 반환
         return result;
     }
-
 
     /**
      * 결제 기반 환불 처리
@@ -116,7 +117,6 @@ public class PaymentService {
             throw new InsufficientPointException();
         }
 
-        // ✅ 변경된 부분: 환불 결과 응답 반환
         return pointService.saveRefundHistory(user, refundAmount, refundOrderId);
     }
 }

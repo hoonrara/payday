@@ -7,8 +7,4 @@ public class InvalidPaymentException extends BusinessException {
     public InvalidPaymentException() {
         super(ErrorCode.INVALID_PAYMENT);
     }
-
-    public InvalidPaymentException(ErrorCode errorCode) {
-        super(errorCode);
-    }
 }
