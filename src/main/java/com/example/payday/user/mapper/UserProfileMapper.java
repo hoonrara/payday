@@ -3,7 +3,11 @@ package com.example.payday.user.mapper;
 import com.example.payday.user.domain.UserProfile;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserProfileMapper {
 
     public static UserProfileListResponseDto toListDto(UserProfile entity) {

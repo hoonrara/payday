@@ -7,11 +7,14 @@ import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointHistoryResponseDto;
 import com.example.payday.point.mapper.PointHistoryMapper;
 import com.example.payday.user.domain.User;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AdminPointMapper {
 
     public static AdminPointHistorySummaryDto toSummaryDto(User user, Page<PointHistory> historyPage) {

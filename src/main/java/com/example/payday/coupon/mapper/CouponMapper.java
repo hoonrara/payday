@@ -4,7 +4,10 @@ import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.coupon.domain.CouponTemplate;
 import com.example.payday.coupon.dto.CouponResponseDto;
 import com.example.payday.user.domain.User;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CouponMapper {
 
     public static CouponResponseDto toResponseDto(Coupon coupon, int originalAmount, int discountedAmount) {

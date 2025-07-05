@@ -3,7 +3,10 @@ package com.example.payday.admin.coupon.mapper;
 import com.example.payday.admin.coupon.dto.CouponTemplateCreateRequestDto;
 import com.example.payday.admin.coupon.dto.CouponTemplateResponseDto;
 import com.example.payday.coupon.domain.CouponTemplate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CouponTemplateMapper {
 
     public static CouponTemplate toEntity(CouponTemplateCreateRequestDto dto) {

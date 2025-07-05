@@ -5,7 +5,10 @@ import com.example.payday.point.domain.PointHistory;
 import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointHistoryResponseDto;
 import com.example.payday.user.domain.User;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PointHistoryMapper {
 
     public static PointHistoryResponseDto toDto(PointHistory entity) {

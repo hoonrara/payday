@@ -4,7 +4,11 @@ import com.example.payday.user.domain.User;
 import com.example.payday.user.domain.UserProfile;
 import com.example.payday.user.dto.UserSignupRequestDto;
 import com.example.payday.user.dto.UserSignupResponseDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
     public static User toEntity(UserSignupRequestDto dto) {
         return User.builder()
