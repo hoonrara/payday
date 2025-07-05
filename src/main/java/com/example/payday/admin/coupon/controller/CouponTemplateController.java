@@ -3,6 +3,8 @@ package com.example.payday.admin.coupon.controller;
 import com.example.payday.admin.coupon.dto.CouponTemplateCreateRequestDto;
 import com.example.payday.admin.coupon.dto.CouponTemplateResponseDto;
 import com.example.payday.admin.coupon.service.CouponTemplateService;
+import com.example.payday.global.dto.PagedResponse;
+import com.example.payday.global.mapper.PagedResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +29,8 @@ public class CouponTemplateController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CouponTemplateResponseDto>> getAll(Pageable pageable) {
-        return ResponseEntity.ok(service.getAllTemplates(pageable));
+    public ResponseEntity<PagedResponse<CouponTemplateResponseDto>> getAll(Pageable pageable) {
+        Page<CouponTemplateResponseDto> page = service.getAllTemplates(pageable);
+        return ResponseEntity.ok(PagedResponseMapper.toResponse(page));
     }
 }

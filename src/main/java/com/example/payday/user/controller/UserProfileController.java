@@ -1,5 +1,7 @@
 package com.example.payday.user.controller;
 
+import com.example.payday.global.dto.PagedResponse;
+import com.example.payday.global.mapper.PagedResponseMapper;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
 import com.example.payday.user.service.UserProfileService;
@@ -19,11 +21,12 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
 
     @GetMapping
-    public ResponseEntity<Page<UserProfileListResponseDto>> getProfiles(
+    public ResponseEntity<PagedResponse<UserProfileListResponseDto>> getProfiles(
             @RequestParam(defaultValue = "date") String sortKey,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(userProfileService.getAllProfiles(sortKey, pageable));
+        Page<UserProfileListResponseDto> profiles = userProfileService.getAllProfiles(sortKey, pageable);
+        return ResponseEntity.ok(PagedResponseMapper.toResponse(profiles));
     }
 
     @GetMapping("/{userId}")
