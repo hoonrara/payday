@@ -1,4 +1,4 @@
-package com.example.payday.coupon.dto;
+package com.example.payday.admin.coupon.dto;
 
 import com.example.payday.coupon.domain.CouponType;
 import jakarta.validation.constraints.NotBlank;

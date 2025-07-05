@@ -6,6 +6,8 @@ import com.example.payday.coupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +34,11 @@ public class CouponController {
      * 유저가 보유한 쿠폰 목록 조회
      */
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<CouponResponseDto>> getUserCoupons(@PathVariable Long userId) {
-        List<CouponResponseDto> responses = couponService.getCouponsByUser(userId);
+    public ResponseEntity<Page<CouponResponseDto>> getUserCoupons(
+            @PathVariable Long userId,
+            Pageable pageable
+    ) {
+        Page<CouponResponseDto> responses = couponService.getCouponsByUser(userId, pageable);
         return ResponseEntity.ok(responses);
     }
 }

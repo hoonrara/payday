@@ -1,9 +1,11 @@
-package com.example.payday.coupon.controller;
+package com.example.payday.admin.coupon.controller;
 
-import com.example.payday.coupon.dto.CouponTemplateCreateRequestDto;
-import com.example.payday.coupon.dto.CouponTemplateResponseDto;
-import com.example.payday.coupon.service.CouponTemplateService;
+import com.example.payday.admin.coupon.dto.CouponTemplateCreateRequestDto;
+import com.example.payday.admin.coupon.dto.CouponTemplateResponseDto;
+import com.example.payday.admin.coupon.service.CouponTemplateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,13 +21,13 @@ public class CouponTemplateController {
     private final CouponTemplateService service;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Validated CouponTemplateCreateRequestDto dto) {
-        service.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CouponTemplateResponseDto> create(@RequestBody CouponTemplateCreateRequestDto dto) {
+        CouponTemplateResponseDto created = service.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
-    public ResponseEntity<List<CouponTemplateResponseDto>> getAll() {
-        return ResponseEntity.ok(service.getAllTemplates());
+    public ResponseEntity<Page<CouponTemplateResponseDto>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(service.getAllTemplates(pageable));
     }
 }

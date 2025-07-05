@@ -17,7 +17,10 @@ public enum ErrorCode {
     UNSUPPORTED_COUPON_TYPE("지원하지 않는 쿠폰 타입입니다.", HttpStatus.BAD_REQUEST),
     HISTORY_NOT_FOUND("해당 주문의 충전 기록이 없습니다.", HttpStatus.NOT_FOUND),
     COUPON_TEMPLATE_NOT_FOUND("존재하지 않는 쿠폰 템플릿입니다.", HttpStatus.NOT_FOUND),
-    DUPLICATE_ORDER_ID("이미 사용된 주문 ID입니다.", HttpStatus.BAD_REQUEST);
+    DUPLICATE_ORDER_ID("이미 사용된 주문 ID입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_ISSUED_COUPON("이미 발급받은 쿠폰입니다.", HttpStatus.BAD_REQUEST),
+    ;
 
 
 

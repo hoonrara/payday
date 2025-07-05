@@ -1,23 +1,32 @@
-package com.example.payday.admin.point;
+package com.example.payday.admin.point.controller;
 
-import com.example.payday.point.dto.PointHistoryResponseDto;
-import com.example.payday.point.service.PointService;
+import com.example.payday.admin.point.dto.AdminPointHistorySummaryDto;
+import com.example.payday.admin.point.dto.AdminPointMonthlyTotalSummaryDto;
+import com.example.payday.admin.point.service.AdminPointService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/admin/points")
 @RequiredArgsConstructor
-@RequestMapping("/api/admin/users/{userId}/points")
 public class AdminPointController {
 
-    private final PointService pointService; // ✅ 이거만 있으면 됨
+    private final AdminPointService adminPointService;
 
-    @GetMapping("/histories")
-    public ResponseEntity<List<PointHistoryResponseDto>> getHistories(@PathVariable Long userId) {
-        return ResponseEntity.ok(pointService.getHistories(userId));
+    // ✅ 특정 유저 포인트 요약 조회
+    @GetMapping("/{userId}")
+    public ResponseEntity<AdminPointHistorySummaryDto> getUserPointHistory(@PathVariable Long userId, Pageable pageable) {
+        return ResponseEntity.ok(adminPointService.getAdminHistorySummary(userId, pageable));
     }
+
+    @GetMapping("/monthly-summary/total")
+    public ResponseEntity<AdminPointMonthlyTotalSummaryDto> getMonthlyTotalSummary() {
+        return ResponseEntity.ok(adminPointService.getMonthlyTotalSummary());
+    }
+
+
 }

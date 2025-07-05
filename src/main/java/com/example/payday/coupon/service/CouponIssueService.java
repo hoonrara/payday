@@ -4,6 +4,7 @@ import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.coupon.domain.CouponTemplate;
 import com.example.payday.coupon.dto.CouponIssueRequestDto;
 import com.example.payday.coupon.dto.CouponIssueResponseDto;
+import com.example.payday.coupon.exception.AlreadyIssuedCouponException;
 import com.example.payday.coupon.exception.CouponTemplateNotFoundException;
 import com.example.payday.coupon.mapper.CouponMapper;
 import com.example.payday.coupon.repository.CouponRepository;
@@ -31,6 +32,12 @@ public class CouponIssueService {
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
+
+        // ✅ 중복 발급 방지
+        boolean alreadyIssued = couponRepository.existsByUserAndTemplate(user, template);
+        if (alreadyIssued) {
+            throw new AlreadyIssuedCouponException();
+        }
 
         Coupon coupon = CouponMapper.fromTemplate(template, user);
         Coupon saved = couponRepository.save(coupon);
