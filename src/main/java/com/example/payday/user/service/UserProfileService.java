@@ -2,6 +2,7 @@ package com.example.payday.user.service;
 
 
 import com.example.payday.coupon.service.CouponIssueService;
+import com.example.payday.user.domain.User;
 import com.example.payday.user.domain.UserProfile;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
@@ -31,7 +32,7 @@ public class UserProfileService {
 
     @Transactional
     public UserProfileDetailResponseDto getProfileDetail(Long userId) {
-        UserProfile profile = userProfileRepository.findByUser_Id(userId)
+        UserProfile profile = userProfileRepository.findWithUserByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         profile.increaseViewCount();
@@ -41,12 +42,10 @@ public class UserProfileService {
         return UserProfileMapper.toDetailDto(profile);
     }
 
-    // [임시 구현] 인증/인가 미구현 상태에서 userId를 파라미터로 대체
     @Transactional(readOnly = true)
     public UserProfileDetailResponseDto getMyProfile(Long userId) {
-        UserProfile profile = userProfileRepository.findByUser_Id(userId)
+        UserProfile profile = userProfileRepository.findWithUserByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
-        // 실 서비스에서는 JWT 기반 인증으로 대체 예정
         return UserProfileMapper.toDetailDto(profile);
     }
 }

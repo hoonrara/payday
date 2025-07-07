@@ -25,7 +25,7 @@ public class AdminUserProfileService {
 
 
     public AdminUserProfileListResponseDto getUserProfileById(Long userId) {
-        UserProfile profile = userProfileRepository.findByUserId(userId)
+        UserProfile profile = userProfileRepository.findWithUserByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
         return AdminUserProfileMapper.toDto(profile);
     }

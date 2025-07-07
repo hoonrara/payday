@@ -2,6 +2,7 @@ package com.example.payday.user.controller;
 
 import com.example.payday.global.dto.PagedResponse;
 import com.example.payday.global.mapper.PagedResponseMapper;
+import com.example.payday.user.domain.User;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
 import com.example.payday.user.exception.MissingUserIdForMeEndpointException;
@@ -60,7 +61,7 @@ public class UserProfileController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/me")
-    public ResponseEntity<UserProfileDetailResponseDto> getMyProfile(@RequestParam(required = false) Long userId) {
+    public ResponseEntity<UserProfileDetailResponseDto> getMyProfile(@RequestParam(required = false)Long userId) {
         if (userId == null) {
             throw new MissingUserIdForMeEndpointException();
         }

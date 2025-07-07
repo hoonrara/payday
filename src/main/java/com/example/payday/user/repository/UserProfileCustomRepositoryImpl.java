@@ -1,5 +1,6 @@
 package com.example.payday.user.repository;
 
+import com.example.payday.user.domain.QUser;
 import com.example.payday.user.domain.UserProfile;
 import com.example.payday.user.domain.QUserProfile;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,11 +22,13 @@ public class UserProfileCustomRepositoryImpl implements UserProfileCustomReposit
     @Override
     public Page<UserProfile> findAllSorted(String sortKey, Pageable pageable) {
         QUserProfile profile = QUserProfile.userProfile;
+        QUser user = QUser.user;
 
         OrderSpecifier<?> orderSpecifier = getOrderSpecifier(sortKey, profile);
 
         List<UserProfile> content = queryFactory
                 .selectFrom(profile)
+                .leftJoin(profile.user, user).fetchJoin()
                 .orderBy(orderSpecifier)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -47,5 +51,19 @@ public class UserProfileCustomRepositoryImpl implements UserProfileCustomReposit
             case "date" -> path.getDateTime("createdAt", java.time.LocalDateTime.class).desc(); // 최신순
             default -> path.getDateTime("createdAt", java.time.LocalDateTime.class).desc(); // 기본값: 최신순
         };
+    }
+
+    @Override
+    public Optional<UserProfile> findWithUserByUserId(Long userId) {
+        QUserProfile profile = QUserProfile.userProfile;
+        QUser user = QUser.user;
+
+        UserProfile result = queryFactory
+                .selectFrom(profile)
+                .leftJoin(profile.user, user).fetchJoin()
+                .where(user.id.eq(userId))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }
