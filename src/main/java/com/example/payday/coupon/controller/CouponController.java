@@ -6,7 +6,10 @@ import com.example.payday.coupon.service.CouponService;
 import com.example.payday.global.dto.PagedResponse;
 import com.example.payday.global.mapper.PagedResponseMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import com.example.payday.global.exception.base.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,17 +32,22 @@ public class CouponController {
     private final CouponService couponService;
 
     @Operation(summary = "쿠폰 미리보기", description = "결제 금액과 쿠폰 정보를 기반으로 실제 할인 금액을 미리 계산합니다.")
-    @ApiResponse(responseCode = "200", description = "정상 응답")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "정상 응답"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (쿠폰 ID 누락, 결제 금액 부족 등)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/preview")
     public ResponseEntity<CouponResponseDto> previewCoupon(@RequestBody @Validated CouponApplyRequestDto request) {
         return ResponseEntity.ok(couponService.previewCoupon(request));
     }
 
-    @Operation(
-            summary = "사용자 쿠폰 목록 조회",
-            description = "사용자가 보유한 쿠폰 목록을 페이지네이션으로 조회합니다."
-    )
-    @ApiResponse(responseCode = "200", description = "정상 응답")
+    @Operation(summary = "사용자 쿠폰 목록 조회", description = "사용자가 보유한 쿠폰 목록을 페이지네이션으로 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "정상 응답"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/users/{userId}")
     public ResponseEntity<PagedResponse<CouponResponseDto>> getUserCoupons(
             @PathVariable Long userId,

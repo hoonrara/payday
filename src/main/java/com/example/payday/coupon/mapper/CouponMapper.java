@@ -2,6 +2,7 @@ package com.example.payday.coupon.mapper;
 
 import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.coupon.domain.CouponTemplate;
+import com.example.payday.coupon.dto.CouponIssueResponseDto;
 import com.example.payday.coupon.dto.CouponResponseDto;
 import com.example.payday.user.domain.User;
 import lombok.AccessLevel;
@@ -29,6 +30,14 @@ public class CouponMapper {
                 .expiredAt(template.getExpiredAt())
                 .user(user)
                 .template(template)
+                .build();
+    }
+
+    public static CouponIssueResponseDto toIssueResponseDto(Coupon coupon) {
+        return CouponIssueResponseDto.builder()
+                .couponId(coupon.getId())
+                .couponName(coupon.getName())
+                .userId(coupon.getUser().getId())
                 .build();
     }
 }
