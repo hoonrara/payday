@@ -39,6 +39,12 @@ public class AdminCouponTemplateCreateRequestDto {
     @PositiveOrZero(message = "최소 주문 금액은 0 이상이어야 합니다.")
     private int minOrderAmount;
 
+    @Schema(description = "최대 발급 수 (선착순 쿠폰일 경우만 사용)", example = "10", nullable = true)
+    private Integer maxIssueCount;
+
+    @Schema(description = "자동 발급 여부", example = "true")
+    private boolean autoIssue;
+
     @Schema(description = "만료 일시", example = "2025-08-01T23:59:59")
     @NotNull(message = "만료일시는 필수입니다.")
     private LocalDateTime expiredAt;

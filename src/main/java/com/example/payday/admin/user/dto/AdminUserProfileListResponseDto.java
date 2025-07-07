@@ -21,7 +21,7 @@ public class AdminUserProfileListResponseDto {
     @Schema(description = "이메일", example = "user@example.com")
     private String email;
 
-    @Schema(description = "닉네임", example = "hoonrara")
+    @Schema(description = "닉네임", example = "hoon")
     private String nickname;
 
     @Schema(description = "포인트 잔액", example = "30000")

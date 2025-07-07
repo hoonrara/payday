@@ -35,6 +35,15 @@ public class AdminCouponTemplateResponseDto {
     @Schema(description = "최소 주문 금액", example = "10000")
     private int minOrderAmount;
 
+    @Schema(description = "최대 발급 수", example = "10", nullable = true)
+    private Integer maxIssueCount;
+
+    @Schema(description = "현재 발급 수", example = "3")
+    private int issuedCount;
+
+    @Schema(description = "자동 발급 여부", example = "true")
+    private boolean autoIssue;
+
     @Schema(description = "만료 일시", example = "2025-08-01T23:59:59")
     private LocalDateTime expiredAt;
 }

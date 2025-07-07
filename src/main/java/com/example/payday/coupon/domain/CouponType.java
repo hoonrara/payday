@@ -1,6 +1,5 @@
 package com.example.payday.coupon.domain;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "쿠폰 할인 타입 (정액/정률)")
@@ -18,7 +17,6 @@ public enum CouponType {
         this.description = description;
     }
 
-    @JsonValue
     public String getDescription() {
         return description;
     }

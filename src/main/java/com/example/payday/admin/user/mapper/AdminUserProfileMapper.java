@@ -19,7 +19,7 @@ public class AdminUserProfileMapper {
                 .point(user.getPoint())
                 .viewCount(profile.getViewCount())
                 .joinedAt(profile.getCreatedAt())
-                .lastLoginAt("구현예정")          // ✅ 문자열 하드코딩
+                .lastLoginAt("구현예정")
                 .suspendedStatus("구현예정")
                 .reportCountText("구현예정")
                 .build();
