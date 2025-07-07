@@ -17,6 +17,9 @@ public class AdminCouponTemplateMapper {
                 .maxDiscountAmount(dto.getMaxDiscountAmount())
                 .minOrderAmount(dto.getMinOrderAmount())
                 .expiredAt(dto.getExpiredAt())
+                .maxIssueCount(dto.getMaxIssueCount())   // ✅ 추가
+                .autoIssue(dto.isAutoIssue())           // ✅ 추가
+                .issuedCount(0)                          // ✅ 초기값 0으로 설정
                 .build();
     }
 
@@ -29,6 +32,9 @@ public class AdminCouponTemplateMapper {
                 .maxDiscountAmount(template.getMaxDiscountAmount())
                 .minOrderAmount(template.getMinOrderAmount())
                 .expiredAt(template.getExpiredAt())
+                .maxIssueCount(template.getMaxIssueCount())  // ✅ 추가
+                .issuedCount(template.getIssuedCount())      // ✅ 추가
+                .autoIssue(template.isAutoIssue())           // ✅ 추가
                 .build();
     }
 }
