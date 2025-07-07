@@ -40,4 +40,13 @@ public class UserProfileService {
 
         return UserProfileMapper.toDetailDto(profile);
     }
+
+    // [임시 구현] 인증/인가 미구현 상태에서 userId를 파라미터로 대체
+    @Transactional(readOnly = true)
+    public UserProfileDetailResponseDto getMyProfile(Long userId) {
+        UserProfile profile = userProfileRepository.findByUser_Id(userId)
+                .orElseThrow(UserNotFoundException::new);
+        // 실 서비스에서는 JWT 기반 인증으로 대체 예정
+        return UserProfileMapper.toDetailDto(profile);
+    }
 }

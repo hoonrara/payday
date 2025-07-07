@@ -4,6 +4,7 @@ import com.example.payday.global.dto.PagedResponse;
 import com.example.payday.global.mapper.PagedResponseMapper;
 import com.example.payday.user.dto.UserProfileDetailResponseDto;
 import com.example.payday.user.dto.UserProfileListResponseDto;
+import com.example.payday.user.exception.MissingUserIdForMeEndpointException;
 import com.example.payday.user.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,5 +33,13 @@ public class UserProfileController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserProfileDetailResponseDto> getProfileDetail(@PathVariable Long userId) {
         return ResponseEntity.ok(userProfileService.getProfileDetail(userId));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileDetailResponseDto> getMyProfile(@RequestParam(required = false) Long userId) {
+        if (userId == null) {
+            throw new MissingUserIdForMeEndpointException();
+        }
+        return ResponseEntity.ok(userProfileService.getMyProfile(userId));
     }
 }
