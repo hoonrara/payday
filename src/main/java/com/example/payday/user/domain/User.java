@@ -22,6 +22,9 @@ public class User {
     private String password;
     private int point;
 
+    @Version
+    private Long version;
+
 
     //관리자만 볼 수 있음 (로직은 추후 구현예정)
     @Column(name = "last_login_at")

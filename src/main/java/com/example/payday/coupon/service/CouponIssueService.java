@@ -42,11 +42,8 @@ public class CouponIssueService {
         Coupon coupon = CouponMapper.fromTemplate(template, user);
         Coupon saved = couponRepository.save(coupon);
 
-        return CouponIssueResponseDto.builder()
-                .couponId(saved.getId())
-                .couponName(saved.getName())
-                .userId(saved.getUser().getId())
-                .build();
+        return CouponMapper.toIssueResponseDto(saved);
+
     }
 
     // ✅ 자동 발급 (조회수 기반, 선착순 포함)

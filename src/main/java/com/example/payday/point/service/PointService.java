@@ -2,8 +2,11 @@ package com.example.payday.point.service;
 
 import com.example.payday.coupon.domain.Coupon;
 import com.example.payday.point.domain.PointHistory;
+import com.example.payday.point.domain.type.PointHistoryType;
 import com.example.payday.point.dto.PointHistoryResponseDto;
 import com.example.payday.point.dto.RefundResultDto;
+import com.example.payday.point.exception.DuplicateOrderIdException;
+import com.example.payday.point.exception.PointHistoryNotFoundException;
 import com.example.payday.point.mapper.PointHistoryMapper;
 import com.example.payday.point.repository.PointHistoryRepository;
 import com.example.payday.user.domain.User;
@@ -15,9 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class PointService {
@@ -25,6 +25,7 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
+    @Transactional(readOnly = true)
     public Page<PointHistoryResponseDto> getPointHistoriesByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
@@ -42,18 +43,21 @@ public class PointService {
     }
 
     @Transactional
-    public RefundResultDto saveRefundHistory(User user, int amount, String orderId) {
-        user.usePoint(amount);
-        PointHistory history = PointHistoryMapper.toRefundHistory(user, amount, orderId);
-        pointHistoryRepository.save(history);
+    public RefundResultDto saveRefundHistory(String originalOrderId, String refundOrderId, User user) {
+        PointHistory chargeHistory = pointHistoryRepository
+                .findByOrderIdAndType(originalOrderId, PointHistoryType.CHARGE)
+                .orElseThrow(PointHistoryNotFoundException::new);
 
-        return RefundResultDto.builder()
-                .paymentKey(orderId) // 실 연동 시 paymentKey 사용 가능
-                .cancelAmount(amount)
-                .cancelReason("사용자 요청")  // 하드코딩 가능, 필요 시 파라미터로 뺄 수도 있음
-                .canceledAt(history.getCreatedAt())
-                .status("CANCELED")
-                .build();
+        if (pointHistoryRepository.existsByOrderId(refundOrderId)) {
+            throw new DuplicateOrderIdException();
+        }
+
+        int refundAmount = chargeHistory.getPointAmount();
+        user.usePoint(refundAmount);
+
+        PointHistory refundHistory = PointHistoryMapper.toRefundHistory(user, refundAmount, refundOrderId);
+        pointHistoryRepository.save(refundHistory);
+
+        return PointHistoryMapper.toRefundResultDto(refundHistory);
     }
-
 }

@@ -4,11 +4,15 @@ import com.example.payday.user.dto.UserSignupRequestDto;
 import com.example.payday.user.dto.UserSignupResponseDto;
 import com.example.payday.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import com.example.payday.global.exception.base.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +24,11 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "회원가입", description = "이메일, 비밀번호, 닉네임을 통해 회원가입을 진행합니다.")
-    @ApiResponse(responseCode = "200", description = "회원가입 성공")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (이메일 중복, 유효성 검사 실패 등)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/signup")
     public ResponseEntity<UserSignupResponseDto> signup(@RequestBody @Validated UserSignupRequestDto dto) {
         UserSignupResponseDto response = userService.signup(dto);

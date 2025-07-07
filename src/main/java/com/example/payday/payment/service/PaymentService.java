@@ -41,39 +41,30 @@ public class PaymentService {
     private final DiscountPolicy discountPolicy;
     private final PointService pointService;
 
-    /**
-     * 실제 결제 → 포인트 충전
-     */
     @Transactional
     public PaymentResultDto chargePoint(PointChargeRequestDto request) {
-        // 1. 결제 수단 처리
         PaymentMethod method = PaymentMethod.from(request.getMethod());
         PaymentGateway gateway = gatewayMap.get(method.getBeanName());
         if (gateway == null) {
             throw new UnsupportedPaymentMethodException();
         }
 
-        // 2. 주문 ID 생성 및 중복 확인
         String orderId = OrderIdGenerator.generate(request.getUserId());
         if (pointHistoryRepository.existsByOrderId(orderId)) {
             throw new DuplicateOrderIdException();
         }
 
-        // 3. 충전 포인트 계산
         int pointAmount = request.getPointAmount();
         int discountedAmount = pointAmount;
         Coupon appliedCoupon = null;
 
-        // 4. 쿠폰 적용
         if (request.getCouponId() != null) {
             discountedAmount = couponService.applyDiscountForPayment(request.getCouponId(), pointAmount);
             appliedCoupon = couponService.getCouponById(request.getCouponId());
         }
 
-        // 5. 전역 할인 정책 적용
         int finalPaidAmount = discountPolicy.calculateDiscount(discountedAmount);
 
-        // 6. 결제 수행
         PaymentResultDto result = gateway.pay(
                 PaymentMapper.toPaymentRequest(request, finalPaidAmount, orderId)
         );
@@ -82,19 +73,14 @@ public class PaymentService {
             throw new InvalidPaymentException();
         }
 
-        // 7. 유저 포인트 적립
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
         pointService.saveChargeHistory(user, pointAmount, finalPaidAmount, orderId, appliedCoupon);
 
-        // 8. 결제 결과 반환
         return result;
     }
 
-    /**
-     * 결제 기반 환불 처리
-     */
     @Transactional
     public RefundResultDto refundPoint(RefundRequestDto request) {
         User user = userRepository.findById(request.getUserId())
@@ -103,20 +89,7 @@ public class PaymentService {
         String originalOrderId = request.getOrderId();
         String refundOrderId = originalOrderId + "-REFUND";
 
-        if (pointHistoryRepository.existsByOrderId(refundOrderId)) {
-            throw new DuplicateOrderIdException();
-        }
-
-        PointHistory chargeHistory = pointHistoryRepository
-                .findByOrderIdAndType(originalOrderId, PointHistoryType.CHARGE)
-                .orElseThrow(PointHistoryNotFoundException::new);
-
-        int refundAmount = chargeHistory.getPointAmount();
-
-        if (user.getPoint() < refundAmount) {
-            throw new InsufficientPointException();
-        }
-
-        return pointService.saveRefundHistory(user, refundAmount, refundOrderId);
+        return pointService.saveRefundHistory(originalOrderId, refundOrderId, user);
     }
 }
+
