@@ -1,15 +1,15 @@
 package com.example.payday.admin.coupon.mapper;
 
-import com.example.payday.admin.coupon.dto.CouponTemplateCreateRequestDto;
-import com.example.payday.admin.coupon.dto.CouponTemplateResponseDto;
+import com.example.payday.admin.coupon.dto.AdminCouponTemplateCreateRequestDto;
+import com.example.payday.admin.coupon.dto.AdminCouponTemplateResponseDto;
 import com.example.payday.coupon.domain.CouponTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CouponTemplateMapper {
+public class AdminCouponTemplateMapper {
 
-    public static CouponTemplate toEntity(CouponTemplateCreateRequestDto dto) {
+    public static CouponTemplate toEntity(AdminCouponTemplateCreateRequestDto dto) {
         return CouponTemplate.builder()
                 .name(dto.getName())
                 .type(dto.getDiscountType())
@@ -20,8 +20,8 @@ public class CouponTemplateMapper {
                 .build();
     }
 
-    public static CouponTemplateResponseDto toDto(CouponTemplate template) {
-        return CouponTemplateResponseDto.builder()
+    public static AdminCouponTemplateResponseDto toDto(CouponTemplate template) {
+        return AdminCouponTemplateResponseDto.builder()
                 .id(template.getId())
                 .name(template.getName())
                 .discountType(template.getType())
