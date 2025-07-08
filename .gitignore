@@ -38,7 +38,6 @@ out/
 .vscode/
 
 # 🔐 환경 설정 및 민감 정보
-application.yaml
 application-dev.yml
 application-prod.yml
 
@@ -69,6 +68,6 @@ jacoco.exec
 /test-report/
 
 # 🐳 Docker 관련 파일
-Dockerfile
+
 docker-compose.dev.yml
 docker-compose.prod.yml
