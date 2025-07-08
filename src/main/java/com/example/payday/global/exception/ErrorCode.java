@@ -22,9 +22,7 @@ public enum ErrorCode {
     ALREADY_ISSUED_COUPON("이미 발급받은 쿠폰입니다.", HttpStatus.BAD_REQUEST),
     MISSING_USER_ID_FOR_ME_ENDPOINT("me 엔드포인트는 인증 미구현 상태이므로 userId 쿼리 파라미터가 필요합니다.", HttpStatus.BAD_REQUEST),
     COUPON_OUT_OF_STOCK("쿠폰이 모두 소진되었습니다.", HttpStatus.BAD_REQUEST),
-    
-
-
+    DUPLICATE_EMAIL("이미 가입된 이메일입니다.", HttpStatus.BAD_REQUEST),
     ;
 
 
