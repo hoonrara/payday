@@ -9,6 +9,7 @@
 - DTO ↔ Entity 간 변환 책임을 명확히 분리하기 위해 전용 매퍼 클래스(PaymentMapper 등)를 구성하여, 서비스의 역할을 축소하고 구조적 유지보수성을 강화했습니다.
 
 ---
+<!-- 기술 스택 & 폴더 구조 (가로로 유지) -->
 <table align="center">
   <tr>
     <td align="center" width="50%">
@@ -18,27 +19,21 @@
     <td align="center" width="50%">
       <b>✅ 폴더 구조</b><br>
       <img src="images/folderstructure.png" width="320"/><br>
-      <a href="docs/folder-structure.md" target="_blank">
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <b>✅ 사용자 API 명세</b><br>
-      <img src="images/swagger1.png" width="320"/><br>
-      <p><i>💡 아래 버튼은 Spring Boot 애플리케이션(Docker 실행 포함) 실행 후 접근 가능합니다</i></p>
-      <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
-        <img src="https://img.shields.io/badge/Swagger_UI_접속하기-blue?style=flat-square"/>
-      </a>
-    </td>
-    <td align="center" width="50%">
-      <b>✅ 관리자 API 명세</b><br>
-      <img src="images/swagger2.png" width="320"/><br>
-      <a href="docs/folder-structure.md" target="_blank">
-      </a>
+      <a href="docs/folder-structure.md" target="_blank">📂 폴더 구조 자세히 보기</a>
     </td>
   </tr>
 </table>
+
+<br/>
+
+<!-- 사용자 API 명세 (세로로 크게) -->
+<p><b>✅ 사용자 API 명세</b></p>
+<img src="images/swagger1.png" width="640"/>
+
+<!-- 관리자 API 명세 (세로로 크게) -->
+<p><b>✅ 관리자 API 명세</b></p>
+<img src="images/swagger2.png" width="640"/>
+
 
 ---
 
