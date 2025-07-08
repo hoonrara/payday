@@ -13,6 +13,7 @@ import com.example.payday.user.domain.User;
 import com.example.payday.user.exception.UserNotFoundException;
 import com.example.payday.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,12 @@ public class PointService {
 
         PointHistory refundHistory = PointHistoryMapper.toRefundHistory(user, refundAmount, refundOrderId);
         pointHistoryRepository.save(refundHistory);
+
+        try {
+            pointHistoryRepository.save(refundHistory);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateOrderIdException(); // 동시에 요청이 온 경우 중복 insert 방지
+        }
 
         return PointHistoryMapper.toRefundResultDto(refundHistory);
     }

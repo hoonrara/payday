@@ -30,23 +30,20 @@ public class CouponIssueService {
 
     private final CouponTemplateRepository templateRepository;
     private final CouponRepository couponRepository;
-    private final CouponCommandService couponCommandService;
-
+    private final UserRepository userRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
     public CouponIssueService(
             CouponTemplateRepository templateRepository,
             CouponRepository couponRepository,
-            CouponCommandService couponCommandService,
-            @Qualifier("luaRedisTemplate") RedisTemplate<String, String> redisTemplate // ✅ 이거!
+            UserRepository userRepository,
+            @Qualifier("luaRedisTemplate") RedisTemplate<String, String> redisTemplate
     ) {
         this.templateRepository = templateRepository;
         this.couponRepository = couponRepository;
-        this.couponCommandService = couponCommandService;
+        this.userRepository = userRepository;
         this.redisTemplate = redisTemplate;
     }
-
-
 
     private static final String COUPON_STOCK_LUA_SCRIPT =
             "local stock = redis.call('get', KEYS[1])\n" +
@@ -66,17 +63,34 @@ public class CouponIssueService {
         }
 
         try {
-            return couponCommandService.saveCouponTransactional(request);
-        } catch (AlreadyIssuedCouponException e) {
-            rollbackRedisStock(stockKey);
-            throw e;
-        } catch (UserNotFoundException | CouponTemplateNotFoundException e) {
+            return saveCoupon(request); // 트랜잭션 포함 저장
+        } catch (AlreadyIssuedCouponException |
+                 UserNotFoundException |
+                 CouponTemplateNotFoundException e) {
             rollbackRedisStock(stockKey);
             throw e;
         } catch (Exception e) {
             rollbackRedisStock(stockKey);
-            throw e;
+            throw new RuntimeException("쿠폰 발급 중 알 수 없는 오류", e);
         }
+    }
+
+    @Transactional
+    public CouponIssueResponseDto saveCoupon(CouponIssueRequestDto request) {
+        CouponTemplate template = templateRepository.findById(request.getTemplateId())
+                .orElseThrow(CouponTemplateNotFoundException::new);
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if (couponRepository.existsByUserAndTemplate(user, template)) {
+            throw new AlreadyIssuedCouponException();
+        }
+
+        Coupon coupon = CouponMapper.fromTemplate(template, user);
+        Coupon saved = couponRepository.save(coupon);
+
+        return CouponMapper.toIssueResponseDto(saved);
     }
 
     private void rollbackRedisStock(String stockKey) {
@@ -91,7 +105,10 @@ public class CouponIssueService {
         return script;
     }
 
-
+    /**
+     * 자동 발급 로직 (조회수 기준)
+     */
+    @Transactional
     public void issueAutoCoupons(User user, int viewCount) {
         int issuedCount = 0;
         List<CouponTemplate> templates = templateRepository
