@@ -9,7 +9,7 @@ COPY gradle/ gradle/
 COPY build.gradle settings.gradle ./
 COPY src src/
 
-RUN ./gradlew build --no-daemon
+RUN ./gradlew bootJar --no-daemon
 
 # 포트 열고 앱 실행
 EXPOSE 8080
