@@ -11,40 +11,32 @@
 ---
 <table align="center">
   <tr>
-    <td align="center">
-  <b>✅ 기술 스택</b><br>
-  <img src="images/techstack.png" width="320"/><br>
-  </a>
-</td>
-    <td align="center">
-  <b>✅ 폴더 구조</b><br>
-  <img src="images/folderstructure.png" width="320"/><br>
-  <a href="docs/folder-structure.md" target="_blank">
-    <img src="https://img.shields.io/badge/폴더_구조_자세히보기-blue?style=flat-square"/>
-  </a>
-</td>
+    <td align="center" width="50%">
+      <b>✅ 기술 스택</b><br>
+      <img src="images/techstack.png" width="320"/><br>
+    </td>
+    <td align="center" width="50%">
+      <b>✅ 폴더 구조</b><br>
+      <img src="images/folderstructure.png" width="320"/><br>
+      <a href="docs/folder-structure.md" target="_blank">
+      </a>
+    </td>
   </tr>
-</table>
-
-<br><br>
-
-<table align="center">
   <tr>
-    <td align="center">
-  <b>✅ Swagger UI 메인</b><br>
-  <img src="images/swagger1.png" width="320"/><br>
-  <p><i>💡 아래 버튼은 Spring Boot 애플리케이션(Docker 실행 포함) 실행 후 접근 가능합니다</i></p>
-  <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
-    <img src="https://img.shields.io/badge/Swagger_UI_접속하기-blue?style=flat-square"/>
-  </a>
-</td>
-    <td align="center">
-  <b>✅ API 명세 예시</b><br>
-  <img src="images/swagger2.png" width="320"/><br>
-  <a href="docs/folder-structure.md" target="_blank">
-    <img src="https://img.shields.io/badge/포인트_충전_API_자세히보기-blue?style=flat-square"/>
-  </a>
-</td>
+    <td align="center" width="50%">
+      <b>✅ Swagger UI 메인</b><br>
+      <img src="images/swagger1.png" width="320"/><br>
+      <p><i>💡 아래 버튼은 Spring Boot 애플리케이션(Docker 실행 포함) 실행 후 접근 가능합니다</i></p>
+      <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
+        <img src="https://img.shields.io/badge/Swagger_UI_접속하기-blue?style=flat-square"/>
+      </a>
+    </td>
+    <td align="center" width="50%">
+      <b>✅ API 명세 예시</b><br>
+      <img src="images/swagger2.png" width="320"/><br>
+      <a href="docs/folder-structure.md" target="_blank">
+      </a>
+    </td>
   </tr>
 </table>
 
@@ -62,18 +54,18 @@
 
 ## ✅ 핵심 기능 요약 (과제 요구사항 및 추가 구현 포함)
 
-| 기능 | 설명                                                               | 기술 스택 및 패턴 |
-|------|------------------------------------------------------------------|------------------|
+| 기능 | 설명                                                               | 기술 스택 및 패턴                                                 |
+|------|------------------------------------------------------------------|------------------------------------------------------------|
+| **관리자 API 분리 설계** | 사용자/운영자 기능을 명확히 분리하여 유지보수성과 보안성 확보 | 실무 기반 역할 분리, `/admin/**` 권한 제어 적용 [`자세히 보기`](#api-구성-요약-일반-사용자--어드민-분리-설계) |
 | **회원 프로필 목록 조회** | 정렬, 페이징, 조회수 포함                                                  | QueryDSL, Pageable, WebConfig, Swagger [`자세히 보기`](#회원-프로필-조회) |
-| **회원 프로필 상세 조회수 증가** | 조회수 업데이트 API                                                     | 단건 업데이트 쿼리, QueryDSL [`자세히 보기`](#조회수-업데이트) |
-| **포인트 충전** | 토스페이먼츠 기반 결제 및 포인트 적립<br>Fake 게이트웨이(FakePaymentGateway)로 테스트 환경 지원 | 전략 패턴(PaymentGateway), @Profile [`자세히 보기`](#포인트-충전) |
-| **포인트 환불** | 기존 충전 내역 기반 환불 및 포인트 회수                                          | 낙관적 락(@Version, User), 중복 방지 [`자세히 보기`](#포인트-환불) |
-| **쿠폰 할인 적용** | 정액/정률 쿠폰 할인 적용                                                   | 전략 패턴(CouponDiscountPolicy), Map 기반 DI [`자세히 보기`](#쿠폰-할인) |
-| **쿠폰 발급** | 쿠폰 템플릿 기반 유저별 단 1회 발급<br>Redis Lua Script 활용                     | Redis Lua Script, 재고 체크, 중복 방지 [`자세히 보기`](#쿠폰-발급) |
-| **전역 할인 정책 구성** | 연휴/장애 보상 등 상황별 할인 설정                                             | 전략 패턴(DiscountPolicy), @Profile [`자세히 보기`](#전역-할인) |
-| **관리자 도메인 분리** | 어드민만 확인 가능한 정보 구성                                                | DDD, Admin 계층 구성 [`자세히 보기`](#관리자-도메인) |
-| **API 명세 문서화** | Swagger UI로 문서 자동화                                               | SpringDoc + Swagger3 [`자세히 보기`](#swagger-ui) |
-| **성능 테스트** | 동시성 상황 테스트 및 통계 측정 (쿠폰 선착순 포함)                                   | k6 부하 테스트, Redis Lua Script [`자세히 보기`](#성능-테스트) |
+| **회원 프로필 상세 조회수 증가** | 조회수 업데이트 API                                                     | 단건 업데이트 쿼리, QueryDSL [`자세히 보기`](#조회수-업데이트)                 |
+| **포인트 충전** | 토스페이먼츠 기반 결제 및 포인트 적립<br>Fake 게이트웨이(FakePaymentGateway)로 테스트 환경 지원 | 전략 패턴(PaymentGateway), @Profile [`자세히 보기`](#포인트-충전)        |
+| **포인트 환불 & 이력 조회** | 기존 충전 내역 기반 환불 처리 + 전체 포인트 내역 페이징 조회 지원 | 낙관적 락(@Version), 중복 환불 방지, 페이징 조회 [`자세히 보기`](#포인트-환불--이력-조회) |
+| **쿠폰 할인 적용** | 정액/정률 쿠폰 할인 적용                                                   | 전략 패턴(CouponDiscountPolicy), Map 기반 DI [`자세히 보기`](#쿠폰-할인)  |
+| **쿠폰 발급** | 쿠폰 템플릿 기반 유저별 단 1회 발급<br>Redis Lua Script 활용                     | Redis Lua Script, 재고 체크, 중복 방지 [`자세히 보기`](#쿠폰-발급)          |
+| **전역 할인 정책 구성** | 연휴/장애 보상 등 상황별 할인 설정                                             | 전략 패턴(DiscountPolicy), @Profile [`자세히 보기`](#전역-할인)         |
+| **API 명세 문서화** | Swagger UI로 문서 자동화                                               | SpringDoc + Swagger3 [`자세히 보기`](#swagger-ui)               |
+| **성능 테스트** | 동시성 상황 테스트 및 통계 측정 (쿠폰 선착순 포함)                                   | k6 부하 테스트, Redis Lua Script [`자세히 보기`](#성능-테스트)            |
 | **예외 처리 구조** | 전역 ErrorCode + 커스텀 Exception 구성                                  | ErrorCode enum, BaseException, Swagger 적용 [`자세히 보기`](#예외-처리) |
 
 ---
