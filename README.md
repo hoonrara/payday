@@ -75,28 +75,6 @@
 
 이 프로젝트는 별도의 프로그램 설치 없이 Docker를 통해 실행할 수 있습니다.
 
-### 1. Docker 이미지 빌드
-
-```bash
-docker build -t payday-app .
-````
-
-### 2. Docker 실행
-
-```bash
-docker run -p 8080:8080 --name payday payday-app
-```
-
-### 3. Swagger 접속
-
-```
-http://localhost:8080/swagger-ui/index.html
-```
-
-### 📦 기타
-
-* `Dockerfile`은 JDK 21 및 Gradle 기반으로 구성되어 있으며, `application.yml`은 내부 H2 또는 MySQL에 연결됩니다.
-* 테스트를 위한 Redis 및 MySQL은 Docker Compose를 통해 함께 실행 가능합니다. (필요시 `docker-compose.yml` 구성 제공 가능)
 
 ---
 
