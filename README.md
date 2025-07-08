@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <td align="center" width="50%">
-      <b>✅ Swagger UI 메인</b><br>
+      <b>✅ 사용자 API 명세</b><br>
       <img src="images/swagger1.png" width="320"/><br>
       <p><i>💡 아래 버튼은 Spring Boot 애플리케이션(Docker 실행 포함) 실행 후 접근 가능합니다</i></p>
       <a href="http://localhost:8080/swagger-ui/index.html" target="_blank">
@@ -32,7 +32,7 @@
       </a>
     </td>
     <td align="center" width="50%">
-      <b>✅ API 명세 예시</b><br>
+      <b>✅ 관리자 API 명세</b><br>
       <img src="images/swagger2.png" width="320"/><br>
       <a href="docs/folder-structure.md" target="_blank">
       </a>
@@ -52,7 +52,7 @@
 
 ---
 
-## ✅ 핵심 기능 요약 (과제 요구사항 및 추가 구현 포함)
+## ✅ 핵심 기능 요약 
 
 | 기능 | 설명                                                               | 기술 스택 및 패턴                                                               |
 |------|------------------------------------------------------------------|--------------------------------------------------------------------------|
