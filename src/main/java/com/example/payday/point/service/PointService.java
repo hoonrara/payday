@@ -26,23 +26,35 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
+    /**
+     * 사용자의 포인트 히스토리 목록 조회
+     */
     @Transactional(readOnly = true)
     public Page<PointHistoryResponseDto> getPointHistoriesByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         Page<PointHistory> histories = pointHistoryRepository.findAllByUser(user, pageable);
-
         return histories.map(PointHistoryMapper::toDto);
     }
 
+    /**
+     * 포인트 충전 기록 저장 (포인트 적립 + 이력 저장)
+     */
     @Transactional
     public void saveChargeHistory(User user, int pointToCharge, int paidAmount, String orderId, Coupon coupon) {
         user.addPoint(pointToCharge);
-        PointHistory history = PointHistoryMapper.toChargeHistory(user, pointToCharge, paidAmount, orderId, coupon);
+
+        PointHistory history = PointHistoryMapper.toChargeHistory(
+                user, pointToCharge, paidAmount, orderId, coupon
+        );
+
         pointHistoryRepository.save(history);
     }
 
+    /**
+     * 포인트 환불 기록 저장 (포인트 차감 + 환불 이력)
+     */
     @Transactional
     public RefundResultDto saveRefundHistory(String originalOrderId, String refundOrderId, User user) {
         PointHistory chargeHistory = pointHistoryRepository
@@ -54,15 +66,16 @@ public class PointService {
         }
 
         int refundAmount = chargeHistory.getPointAmount();
-        user.usePoint(refundAmount);
+
+        user.usePoint(refundAmount); // 포인트 회수
 
         PointHistory refundHistory = PointHistoryMapper.toRefundHistory(user, refundAmount, refundOrderId);
-        pointHistoryRepository.save(refundHistory);
 
         try {
             pointHistoryRepository.save(refundHistory);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateOrderIdException(); // 동시에 요청이 온 경우 중복 insert 방지
+            // 멀티쓰레드 환경에서 중복 insert 방지
+            throw new DuplicateOrderIdException();
         }
 
         return PointHistoryMapper.toRefundResultDto(refundHistory);

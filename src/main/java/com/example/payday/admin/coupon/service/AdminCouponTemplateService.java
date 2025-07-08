@@ -36,6 +36,7 @@ public class AdminCouponTemplateService {
     public AdminCouponTemplateResponseDto create(AdminCouponTemplateCreateRequestDto dto) {
         CouponTemplate saved = repository.save(AdminCouponTemplateMapper.toEntity(dto));
 
+        // 선착순 쿠폰일 경우 Redis에 재고 등록
         if (saved.getMaxIssueCount() != null) {
             String stockKey = "coupon:" + saved.getId() + ":stock";
             redisTemplate.opsForValue().set(stockKey, String.valueOf(saved.getMaxIssueCount()));

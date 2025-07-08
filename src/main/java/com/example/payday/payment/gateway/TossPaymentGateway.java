@@ -33,6 +33,7 @@ public class TossPaymentGateway implements PaymentGateway {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        // Toss 인증 헤더 구성 (Basic Auth)
         String basicAuth = Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
         headers.set("Authorization", "Basic " + basicAuth);
 
@@ -60,12 +61,14 @@ public class TossPaymentGateway implements PaymentGateway {
             } else {
                 throw new InvalidPaymentException();
             }
+
         } catch (Exception e) {
             log.error("Toss 결제 오류", e);
             throw new InvalidPaymentException();
         }
     }
 
+    // approvedAt 필드 파싱 (실패 시 현재 시간으로 대체)
     private LocalDateTime parseApprovedAt(Object approvedAtRaw) {
         try {
             return LocalDateTime.parse((String) approvedAtRaw, DateTimeFormatter.ISO_OFFSET_DATE_TIME);

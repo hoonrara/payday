@@ -19,10 +19,11 @@ public class AdminUserProfileMapper {
                 .point(user.getPoint())
                 .viewCount(profile.getViewCount())
                 .joinedAt(profile.getCreatedAt())
+
+                // ⚠️ 아직 연동되지 않은 필드 - 후속 구현 예정
                 .lastLoginAt("구현예정")
                 .suspendedStatus("구현예정")
                 .reportCountText("구현예정")
                 .build();
-
     }
 }

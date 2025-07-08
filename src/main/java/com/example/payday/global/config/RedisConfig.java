@@ -16,6 +16,7 @@ public class RedisConfig {
         return new LettuceConnectionFactory("localhost", 6379);
     }
 
+    // Lua Script 전용 RedisTemplate
     @Bean(name = "luaRedisTemplate")
     public RedisTemplate<String, String> luaRedisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
@@ -25,6 +26,7 @@ public class RedisConfig {
         return template;
     }
 
+    // 일반 StringRedisTemplate
     @Bean(name = "stringRedisTemplate")
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
         return new StringRedisTemplate(factory);

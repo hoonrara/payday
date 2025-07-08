@@ -30,6 +30,7 @@ public class AdminPointMapper {
     }
 
     public static AdminPointHistorySummaryDto toSummaryDto(User user, Page<PointHistory> historyPage) {
+        // 사용자별 총 충전/환불 금액 계산
         int totalCharge = historyPage.stream()
                 .filter(h -> h.getType() == PointHistoryType.CHARGE)
                 .mapToInt(PointHistory::getPointAmount)
@@ -40,6 +41,7 @@ public class AdminPointMapper {
                 .mapToInt(PointHistory::getPointAmount)
                 .sum();
 
+        // 포인트 내역을 DTO 페이지로 변환
         Page<PointHistoryResponseDto> dtoPage = historyPage.map(PointHistoryMapper::toDto);
 
         return AdminPointHistorySummaryDto.builder()
@@ -55,9 +57,8 @@ public class AdminPointMapper {
         return AdminPointMonthlyTotalSummaryDto.builder()
                 .totalChargeAmount(totalCharge)
                 .totalRefundAmount(totalRefund)
-                .netProfit(totalCharge - totalRefund)
+                .netProfit(totalCharge - totalRefund) // 월 기준 순이익 계산
                 .build();
     }
-
-
 }
+

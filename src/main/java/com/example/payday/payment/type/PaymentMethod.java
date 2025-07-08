@@ -14,8 +14,9 @@ public enum PaymentMethod {
         return gatewayBeanName;
     }
 
+    // 문자열로부터 결제 방식 파싱 (예: "toss" → TOSS)
     public static PaymentMethod from(String value) {
-        for (PaymentMethod method : PaymentMethod.values()) {
+        for (PaymentMethod method : values()) {
             if (method.gatewayBeanName.equalsIgnoreCase(value)) {
                 return method;
             }

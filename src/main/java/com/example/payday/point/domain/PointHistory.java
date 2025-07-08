@@ -17,7 +17,7 @@ public class PointHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int pointAmount;
+    private int pointAmount; // 충전 또는 환불된 포인트
 
     @Enumerated(EnumType.STRING)
     private PointHistoryType type;
@@ -27,7 +27,7 @@ public class PointHistory {
 
     private LocalDateTime createdAt;
 
-    private int paidAmount;
+    private int paidAmount; // 실제 결제한 금액 (포인트 = 결제금액 + 쿠폰 할인)
 
     @Column(nullable = false)
     private int remainPoint = 0;
@@ -51,7 +51,4 @@ public class PointHistory {
         this.coupon = coupon;
         this.createdAt = LocalDateTime.now();
     }
-
-
-
 }

@@ -12,12 +12,13 @@ public class FakePaymentGateway implements PaymentGateway {
 
     @Override
     public PaymentResultDto pay(PaymentRequestDto request) {
+        // 테스트용 Gateway - 승인 처리 Mock
         return PaymentResultDto.builder()
                 .orderId(request.getOrderId())
                 .paymentKey(request.getPaymentKey())
                 .amount(request.getAmount())
                 .status(PaymentStatus.DONE)
-                .approvedAt(LocalDateTime.now()) // ✅ 추가
+                .approvedAt(LocalDateTime.now())
                 .build();
     }
 }

@@ -20,22 +20,23 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
     private String password;
+
     private int point;
 
     @Version
-    private Long version;
+    private Long version; // 낙관적 락용 버전 필드
 
-
-    //관리자만 볼 수 있음 (로직은 추후 구현예정)
+    // 관리자용 정보 (마이페이지에 노출되지 않음)
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
+
     @Column(name = "is_suspended")
     private boolean isSuspended = false;
+
     @Column(name = "report_count")
     private int reportCount = 0;
-
-
 
     @Builder
     public User(String email, String password, int point) {
@@ -44,7 +45,6 @@ public class User {
         this.point = point;
     }
 
-    // 포인트 증가
     public void addPoint(int amount) {
         this.point += amount;
     }
@@ -55,6 +55,5 @@ public class User {
         }
         this.point -= amount;
     }
-
-
 }
+

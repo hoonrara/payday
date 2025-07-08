@@ -52,6 +52,9 @@ public class CouponIssueService {
                     "redis.call('decr', KEYS[1])\n" +
                     "return 1";
 
+    /**
+     * 선착순 쿠폰 발급 - Redis Lua 스크립트로 재고 관리
+     */
     public CouponIssueResponseDto issueCoupon(CouponIssueRequestDto request) {
         String stockKey = "coupon:" + request.getTemplateId() + ":stock";
 
@@ -63,7 +66,7 @@ public class CouponIssueService {
         }
 
         try {
-            return saveCoupon(request); // 트랜잭션 포함 저장
+            return saveCoupon(request); // Redis 성공 후 실제 DB 저장
         } catch (AlreadyIssuedCouponException |
                  UserNotFoundException |
                  CouponTemplateNotFoundException e) {
@@ -93,6 +96,7 @@ public class CouponIssueService {
         return CouponMapper.toIssueResponseDto(saved);
     }
 
+    // Redis 재고 복구
     private void rollbackRedisStock(String stockKey) {
         redisTemplate.opsForValue().increment(stockKey);
         log.warn("💥 Redis 재고 복구 수행됨! key={}", stockKey);
@@ -106,7 +110,7 @@ public class CouponIssueService {
     }
 
     /**
-     * 자동 발급 로직 (조회수 기준)
+     * 자동 발급 쿠폰 처리 (조회수 기반, 선착순 체크 포함)
      */
     @Transactional
     public void issueAutoCoupons(User user, int viewCount) {
@@ -120,7 +124,7 @@ public class CouponIssueService {
             Coupon coupon = CouponMapper.fromTemplate(template, user);
             couponRepository.save(coupon);
 
-            template.increaseIssuedCount();
+            template.increaseIssuedCount();// DB에서 issuedCount 증가
             templateRepository.save(template);
         }
     }

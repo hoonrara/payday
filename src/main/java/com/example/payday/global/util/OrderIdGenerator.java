@@ -9,11 +9,10 @@ public class OrderIdGenerator {
 
     /**
      * 주문 ID 자동 생성: ORDER_날짜_시간_유저ID
+     * 예: ORDER_20250708_142310_1
      */
     public static String generate(Long userId) {
         String timestamp = LocalDateTime.now().format(FORMATTER);
         return "ORDER_" + timestamp + "_" + userId;
     }
-
-
 }

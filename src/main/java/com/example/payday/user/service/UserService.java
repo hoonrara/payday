@@ -20,18 +20,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
 
+    /**
+     * 회원가입 - 사용자 & 프로필 동시 생성
+     */
     @Transactional
     public UserSignupResponseDto signup(UserSignupRequestDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new DuplicateEmailException(); // 사전 중복 검사
+            throw new DuplicateEmailException(); // 이메일 중복 사전 검사
         }
 
         try {
             User user = userRepository.save(UserMapper.toEntity(dto));
             UserProfile profile = userProfileRepository.save(UserMapper.toProfile(user, dto.getNickname()));
+
             return UserMapper.toSignupDto(user, profile);
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateEmailException(); // 동시 가입 시 DB에서 막히는 경우
+            // 동시 가입 요청 등으로 인해 DB에서 중복 에러 발생 시 처리
+            throw new DuplicateEmailException();
         }
     }
 }

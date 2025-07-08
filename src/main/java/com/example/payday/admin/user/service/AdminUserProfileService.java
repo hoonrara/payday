@@ -18,12 +18,13 @@ public class AdminUserProfileService {
 
     private final UserProfileRepository userProfileRepository;
 
+    // 어드민 전체 사용자 프로필 목록 조회 (정렬 기준 포함)
     public Page<AdminUserProfileListResponseDto> getAllProfiles(String sortKey, Pageable pageable) {
         Page<UserProfile> profiles = userProfileRepository.findAllSorted(sortKey, pageable);
         return profiles.map(AdminUserProfileMapper::toDto);
     }
 
-
+    // 어드민 사용자 상세 조회
     public AdminUserProfileListResponseDto getUserProfileById(Long userId) {
         UserProfile profile = userProfileRepository.findWithUserByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);

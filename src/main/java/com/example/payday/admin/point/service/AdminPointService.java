@@ -28,6 +28,7 @@ public class AdminPointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
+    // 특정 유저의 포인트 내역 요약 조회 (총 충전/환불 금액 포함)
     public AdminPointHistorySummaryDto getAdminHistorySummary(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
@@ -36,11 +37,14 @@ public class AdminPointService {
 
         return AdminPointMapper.toSummaryDto(user, historyPage);
     }
+
+    // 전체 유저 포인트 내역 조회
     public Page<AdminPointHistoryDto> getAllHistories(Pageable pageable) {
         Page<PointHistory> histories = pointHistoryRepository.findAllBy(pageable);
         return histories.map(AdminPointMapper::toDto);
     }
 
+    // 이번 달 전체 포인트 충전/환불 금액 합산
     public AdminPointMonthlyTotalSummaryDto getMonthlyTotalSummary() {
         LocalDateTime startOfMonth = LocalDateTime.now()
                 .withDayOfMonth(1)
@@ -63,5 +67,5 @@ public class AdminPointService {
 
         return AdminPointMapper.toTotalSummaryDto(totalCharge, totalRefund);
     }
-
 }
+

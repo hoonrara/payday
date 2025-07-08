@@ -14,6 +14,7 @@ public class UserProfile {
     private Long id;
 
     private String nickname;
+
     private int viewCount;
 
     private LocalDateTime createdAt;

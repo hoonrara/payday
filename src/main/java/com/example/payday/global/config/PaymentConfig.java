@@ -16,6 +16,9 @@ public class PaymentConfig {
     private final PaymentGateway toss;
     private final PaymentGateway fake;
 
+    /**
+     * 결제 수단에 따른 Gateway 매핑 구성
+     */
     @Bean
     public Map<PaymentMethod, PaymentGateway> gatewayMap() {
         Map<PaymentMethod, PaymentGateway> map = new EnumMap<>(PaymentMethod.class);

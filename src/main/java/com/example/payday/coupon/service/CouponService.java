@@ -28,7 +28,7 @@ public class CouponService {
     private final UserRepository userRepository; // ✅ 반드시 주입 필요
 
     /**
-     * 내부 결제 로직 등에서 금액 반환용 (단순 금액 계산 + 사용 처리)
+     * 결제 시 실제 할인 적용 + 쿠폰 사용 처리
      */
     @Transactional
     public int applyDiscountForPayment(Long couponId, int originalAmount) {
@@ -49,7 +49,7 @@ public class CouponService {
     }
 
     /**
-     * 쿠폰 미리보기 (할인 금액 계산)
+     * 미리보기 기능 - 실제 사용되기 전 할인 금액 계산
      */
     @Transactional(readOnly = true)
     public CouponResponseDto previewCoupon(CouponApplyRequestDto request) {
@@ -62,7 +62,7 @@ public class CouponService {
     }
 
     /**
-     * 사용자의 발급된 쿠폰 전체 조회
+     * 사용자 보유 쿠폰 목록 조회
      */
     @Transactional(readOnly = true)
     public Page<CouponResponseDto> getCouponsByUser(Long userId, Pageable pageable) {
@@ -71,7 +71,6 @@ public class CouponService {
 
         Page<Coupon> coupons = couponRepository.findByUser(user, pageable);
 
-        // ✅ Page<Coupon> → Page<CouponResponseDto> 로 변환
         return coupons.map(c -> CouponMapper.toResponseDto(c, 0, 0)); // 할인 미리보기 적용 안함
     }
 
