@@ -40,6 +40,7 @@ public class AdminCouponTemplateCreateRequestDto {
     private int minOrderAmount;
 
     @Schema(description = "최대 발급 수 (선착순 쿠폰일 경우만 사용)", example = "10", nullable = true)
+    @PositiveOrZero(message = "최대 발급 수는 0 이상이어야 합니다.")
     private Integer maxIssueCount;
 
     @Schema(description = "자동 발급 여부", example = "true")
