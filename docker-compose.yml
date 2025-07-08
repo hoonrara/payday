@@ -20,5 +20,16 @@ services:
       - "6379:6379"
     restart: always
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile   # 위에 만든 Dockerfile 사용
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+
+
 volumes:
   mysql_data:
