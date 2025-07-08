@@ -29,14 +29,14 @@ public class CouponTemplate {
 
     private LocalDateTime expiredAt;
 
-    // ✅ [추가] 자동 발급 조건
+    //  자동 발급 조건
     private Integer viewThreshold;      // 조회수 조건 (nullable)
 
-    // ✅ [추가] 선착순 조건
+    //  선착순 조건
     private Integer maxIssueCount;      // 발급 제한 수 (nullable)
     private int issuedCount;            // 현재 발급 수
 
-    // ✅ [추가] 자동 발급 여부
+    // 자동 발급 여부
     private boolean autoIssue;
 
     @Builder

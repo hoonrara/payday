@@ -27,7 +27,7 @@ public class Coupon {
 
     private int minOrderAmount;
 
-    private Integer maxDiscountAmount; // ✅ 최대 할인 금액 추가
+    private Integer maxDiscountAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -39,6 +39,10 @@ public class AdminCouponTemplateCreateRequestDto {
     @PositiveOrZero(message = "최소 주문 금액은 0 이상이어야 합니다.")
     private int minOrderAmount;
 
+    @Schema(description = "자동 발급 조회수 조건", example = "5", nullable = true)
+    @PositiveOrZero(message = "조회수 조건은 0 이상이어야 합니다.")
+    private Integer viewThreshold;
+
     @Schema(description = "최대 발급 수 (선착순 쿠폰일 경우만 사용)", example = "10", nullable = true)
     @PositiveOrZero(message = "최대 발급 수는 0 이상이어야 합니다.")
     private Integer maxIssueCount;

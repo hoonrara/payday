@@ -14,12 +14,12 @@ public class PointHistoryMapper {
 
     public static PointHistoryResponseDto toDto(PointHistory entity) {
         return PointHistoryResponseDto.builder()
-                .pointAmount(entity.getPointAmount())  // ✅ 수정
+                .pointAmount(entity.getPointAmount())  //
                 .type(entity.getType())
                 .remainPoint(entity.getRemainPoint())
                 .createdAt(entity.getCreatedAt())
-                .orderId(entity.getOrderId())                           // ✅ 추가
-                .couponId(entity.getCoupon() != null                   // ✅ 추가
+                .orderId(entity.getOrderId())
+                .couponId(entity.getCoupon() != null
                         ? entity.getCoupon().getId() : null)
                 .build();
     }

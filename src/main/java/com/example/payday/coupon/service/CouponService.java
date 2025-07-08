@@ -25,8 +25,7 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponDiscountPolicyFactory policyFactory;
-    private final UserRepository userRepository; // ✅ 반드시 주입 필요
-
+    private final UserRepository userRepository;
     /**
      * 결제 시 실제 할인 적용 + 쿠폰 사용 처리
      */
