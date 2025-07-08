@@ -70,3 +70,6 @@ jacoco.exec
 
 docker-compose.dev.yml
 docker-compose.prod.yml
+
+
+!gradle/wrapper/gradle-wrapper.jar
