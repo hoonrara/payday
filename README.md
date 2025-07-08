@@ -74,7 +74,7 @@
 
 ---
 
-## 🛠️ 실행 전 포트 점유 해제 (선택 사항)
+## 🛠️ 실행 전 포트 점유 해제 (선택)
 
 ###  3306 (MySQL), 6379 (Redis), 8080 (Spring) 포트가 이미 점유 중인 경우
 
@@ -100,7 +100,7 @@ taskkill /PID 1234 /F
 
 ---
 
-## 🐳 Docker로 프로젝트 실행 (3줄 끝)
+## 🐳 Docker로 프로젝트 실행
 
 ```bash
 git clone https://github.com/your-id/payday.git
