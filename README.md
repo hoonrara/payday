@@ -19,7 +19,6 @@
     <td align="center" width="50%">
       <b> 폴더 구조</b><br>
       <img src="images/folderstructure.png" width="320"/><br>
-      <a href="docs/folder-structure.md" target="_blank">📂 폴더 구조 자세히 보기</a>
     </td>
   </tr>
 </table>
