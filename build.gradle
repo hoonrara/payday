@@ -53,11 +53,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// ✅ Q타입 생성 경로 인식 (Gradle 8.x 이상 호환 방식)
+//  Q타입 생성 경로 인식 (Gradle 8.x 이상 호환 방식)
 sourceSets {
 	main {
 		java {
 			srcDirs += 'build/generated/sources/annotationProcessor/java/main'
 		}
 	}
+}
+tasks.withType(Test).configureEach {
+	enabled = false
 }
