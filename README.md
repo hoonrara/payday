@@ -62,6 +62,7 @@
 | **API 명세 문서화** | Swagger UI로 문서 자동화                                               | SpringDoc + Swagger3 [`자세히 보기`](docs/swagger-ui.md)                      |
 | **성능 테스트** | 동시성 상황 테스트 및 통계 측정 (쿠폰 선착순 포함)                                   | k6 부하 테스트, Redis Lua Script [`자세히 보기`](docs/성능-테스트.md)                   |
 | **예외 처리 구조** | 전역 ErrorCode + 커스텀 Exception 구성                                  | ErrorCode enum, BaseException, Swagger 적용 [`자세히 보기`](docs/예외-처리.md)      |
+| **관리자 전용 조회/관리 기능** | 조회수 증가 없이 회원 정보 확인, 포인트 요약 및 월간 통계/전체 이력 조회, 쿠폰 템플릿 관리 등 관리자 전용 기능 제공 | `/admin/**` 경로로 분리된 AdminController 기반 기능 구성 [`자세히 보기`](docs/관리자-전용-기능.md) |
 
 ---
 
