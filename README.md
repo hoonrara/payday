@@ -73,48 +73,6 @@
 ---
 
 
----
-
-##  실행 전 포트 점유 해제 (선택)
-
-###  3306 (MySQL), 6379 (Redis), 8080 (Spring) 포트가 이미 점유 중인 경우
-
-### PowerShell 또는 CMD에서 아래 명령 입력
-
-```bash
-netstat -ano | findstr :3306
-netstat -ano | findstr :6379
-netstat -ano | findstr :8080
-```
-
-* 출력되는 **PID**를 확인 후 아래 명령으로 종료:
-
-```bash
-taskkill /PID [PID번호] /F
-```
-
-예시:
-
-```bash
-taskkill /PID 1234 /F
-```
-
----
-
-##  Docker로 프로젝트 실행
-
-```bash
-git clone https://github.com/your-id/payday.git
-cd payday
-docker-compose up --build
-```
-
-* 실행 시 아래 포트 사용:
-
-    *  MySQL: `3306`
-    *  Redis: `6379`
-    *  Spring Boot App: `8080`
-
 * 브라우저에서 Swagger 문서 접속:
    [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
